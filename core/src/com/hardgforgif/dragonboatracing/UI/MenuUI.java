@@ -9,7 +9,7 @@ import com.hardgforgif.dragonboatracing.core.Player;
 
 public class MenuUI extends UI {
 
-    //Sets the dimensions for all the UI components
+    // Sets the dimensions for all the UI components
     private static final int LOGO_WIDTH = 400;
     private static final int LOGO_HEIGHT = 200;
     private static final int LOGO_Y = 450;
@@ -26,21 +26,30 @@ public class MenuUI extends UI {
     Texture playButtonInactive;
     Texture exitButtonActive;
     Texture exitButtonInactive;
+    Texture playEasyButtonActive;
+    Texture playEasyButtonInactive;
+    Texture playMediumButtonActive;
+    Texture playMediumButtonInactive;
+    Texture playHardButtonActive;
+    Texture playHardButtonInactive;
     Texture logo;
 
     ScrollingBackground scrollingBackground = new ScrollingBackground();
 
-
-    public MenuUI(){
+    public MenuUI() {
         scrollingBackground.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         scrollingBackground.setSpeedFixed(true);
         scrollingBackground.setSpeed(ScrollingBackground.DEFAULT_SPEED);
 
-        playButtonActive = new Texture("PlaySelected.png");
-        playButtonInactive = new Texture("PlayUnselected.png");
+        playEasyButtonActive = new Texture("PlayEasySelected.png");// "PlayEasySelected.png"
+        playEasyButtonInactive = new Texture("PlayEasyUnSelected.png");
+        playMediumButtonActive = new Texture("PlayMediumSelected.png");// "PlayMediumSelected.png"
+        playMediumButtonInactive = new Texture("PlayMediumUnselected.png");
+        playHardButtonActive = new Texture("PlayHardSelected.png");// "PlayHardSelected.png"
+        playHardButtonInactive = new Texture("PlayHardUnselected.png");
+        logo = new Texture("Title.png");
         exitButtonActive = new Texture("ExitSelected.png");
         exitButtonInactive = new Texture("ExitUnselected.png");
-        logo = new Texture("Title.png");
     }
 
     @Override
@@ -49,26 +58,40 @@ public class MenuUI extends UI {
         scrollingBackground.updateAndRender(delta, batch);
         batch.draw(logo, screenWidth / 2 - LOGO_WIDTH / 2, LOGO_Y, LOGO_WIDTH, LOGO_HEIGHT);
 
-        // If the mouse is not hovered over the buttons, draw the unselected buttons
-        float x = screenWidth / 2 - PLAY_BUTTON_WIDTH / 2;
-        if (
-                mousePos.x < x + PLAY_BUTTON_WIDTH && mousePos.x > x &&
-                        // cur pos < top_height
-                        mousePos.y < PLAY_BUTTON_Y + PLAY_BUTTON_HEIGHT &&
-                        mousePos.y > PLAY_BUTTON_Y
-        ) {
-            batch.draw(playButtonActive, x, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
+        // Draw easy button
+        float x = (float) (screenWidth / 2 - (PLAY_BUTTON_WIDTH * 1.5));
+        if (mousePos.x < x + PLAY_BUTTON_WIDTH && mousePos.x > x &&
+        // cur pos < top_height
+                mousePos.y < PLAY_BUTTON_Y + PLAY_BUTTON_HEIGHT && mousePos.y > PLAY_BUTTON_Y) {
+            batch.draw(playEasyButtonActive, x, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
         } else {
-            batch.draw(playButtonInactive, x, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
+            batch.draw(playEasyButtonInactive, x, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
+        }
+
+        // Draw medium play button
+        x = (float) (screenWidth / 2 - (PLAY_BUTTON_WIDTH * 0.5));
+        if (mousePos.x < x + PLAY_BUTTON_WIDTH && mousePos.x > x &&
+        // cur pos < top_height
+                mousePos.y < PLAY_BUTTON_Y + PLAY_BUTTON_HEIGHT && mousePos.y > PLAY_BUTTON_Y) {
+            batch.draw(playMediumButtonActive, x, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
+        } else {
+            batch.draw(playMediumButtonInactive, x, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
+        }
+
+        // Draw Hard play butt(on
+        x = (float) (screenWidth / 2 + (PLAY_BUTTON_WIDTH * 0.5));
+        if (mousePos.x < x + PLAY_BUTTON_WIDTH && mousePos.x > x &&
+        // cur pos < top_height
+                mousePos.y < PLAY_BUTTON_Y + PLAY_BUTTON_HEIGHT && mousePos.y > PLAY_BUTTON_Y) {
+            batch.draw(playHardButtonActive, x, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
+        } else {
+            batch.draw(playHardButtonInactive, x, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
         }
 
         // Otherwise draw the selected buttons
         x = screenWidth / 2 - EXIT_BUTTON_WIDTH / 2;
-        if (
-                mousePos.x < x + EXIT_BUTTON_WIDTH && mousePos.x > x &&
-                        mousePos.y < EXIT_BUTTON_Y + EXIT_BUTTON_HEIGHT &&
-                        mousePos.y > EXIT_BUTTON_Y
-        ) {
+        if (mousePos.x < x + EXIT_BUTTON_WIDTH && mousePos.x > x && mousePos.y < EXIT_BUTTON_Y + EXIT_BUTTON_HEIGHT
+                && mousePos.y > EXIT_BUTTON_Y) {
             batch.draw(exitButtonActive, x, EXIT_BUTTON_Y, EXIT_BUTTON_WIDTH, EXIT_BUTTON_HEIGHT);
         } else {
             batch.draw(exitButtonInactive, x, EXIT_BUTTON_Y, EXIT_BUTTON_WIDTH, EXIT_BUTTON_HEIGHT);
@@ -85,30 +108,54 @@ public class MenuUI extends UI {
 
     @Override
     public void getInput(float screenWidth, Vector2 clickPos) {
-        // If the play button is clicked
-        float x = screenWidth / 2 - PLAY_BUTTON_WIDTH / 2;
-        if (
-                clickPos.x < x + PLAY_BUTTON_WIDTH && clickPos.x > x &&
-                        // cur pos < top_height
-                        clickPos.y < PLAY_BUTTON_Y + PLAY_BUTTON_HEIGHT &&
-                        clickPos.y > PLAY_BUTTON_Y
-        ) {
+        // If the play easy button is clicked
+        float x = (float) (screenWidth / 2 - (PLAY_BUTTON_WIDTH * 1.5));
+        if (clickPos.x < x + PLAY_BUTTON_WIDTH && clickPos.x > x &&
+        // cur pos < top_height
+                clickPos.y < PLAY_BUTTON_Y + PLAY_BUTTON_HEIGHT && clickPos.y > PLAY_BUTTON_Y) {
             // Switch to the choosing state
             GameData.mainMenuState = false;
             GameData.choosingBoatState = true;
             GameData.currentUI = new ChoosingUI();
+            // Set difficulty for level ad AI
+            GameData.difficulty = "EASY";
+            GameData.level = new float[] { 0.87f, 0.89f, 0.92f };
+        }
+
+        // If the play medium button is clicked
+        x = (float) (screenWidth / 2 - (PLAY_BUTTON_WIDTH * 0.5));
+        if (clickPos.x < x + PLAY_BUTTON_WIDTH && clickPos.x > x &&
+        // cur pos < top_height
+                clickPos.y < PLAY_BUTTON_Y + PLAY_BUTTON_HEIGHT && clickPos.y > PLAY_BUTTON_Y) {
+            // Switch to the choosing state
+            GameData.mainMenuState = false;
+            GameData.choosingBoatState = true;
+            GameData.currentUI = new ChoosingUI();
+            // Set difficulty for level and AI
+            GameData.difficulty = "MEDIUM";
+            GameData.level = new float[] { 0.92f, 0.97f, 1f };
+        }
+
+        // If the play hard button is clicked
+        x = (float) (screenWidth / 2 + (PLAY_BUTTON_WIDTH * 0.5));
+        if (clickPos.x < x + PLAY_BUTTON_WIDTH && clickPos.x > x &&
+        // cur pos < top_height
+                clickPos.y < PLAY_BUTTON_Y + PLAY_BUTTON_HEIGHT && clickPos.y > PLAY_BUTTON_Y) {
+            // Switch to the choosing state
+            GameData.mainMenuState = false;
+            GameData.choosingBoatState = true;
+            GameData.currentUI = new ChoosingUI();
+            // Set difficulty for level and AI
+            GameData.difficulty = "HARD";
+            GameData.level = new float[] { 1f, 1.05f, 1.07f };
         }
 
         // If the exit button is clicked, close the game
         x = screenWidth / 2 - EXIT_BUTTON_WIDTH / 2;
-        if (clickPos.x < x + EXIT_BUTTON_WIDTH && clickPos.x > x &&
-                clickPos.y < EXIT_BUTTON_Y + EXIT_BUTTON_HEIGHT &&
-                clickPos.y > EXIT_BUTTON_Y
-        ) {
+        if (clickPos.x < x + EXIT_BUTTON_WIDTH && clickPos.x > x && clickPos.y < EXIT_BUTTON_Y + EXIT_BUTTON_HEIGHT
+                && clickPos.y > EXIT_BUTTON_Y) {
             Gdx.app.exit();
         }
-
-
 
     }
 }
