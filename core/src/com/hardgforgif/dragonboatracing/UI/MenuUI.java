@@ -1,6 +1,8 @@
 package com.hardgforgif.dragonboatracing.UI;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
@@ -12,7 +14,7 @@ public class MenuUI extends UI {
     // Sets the dimensions for all the UI components
     private static final int LOGO_WIDTH = 400;
     private static final int LOGO_HEIGHT = 200;
-    private static final int LOGO_Y = 450;
+    private static final int LOGO_Y = 420;
 
     private static final int PLAY_BUTTON_WIDTH = 300;
     private static final int PLAY_BUTTON_HEIGHT = 120;
@@ -21,6 +23,14 @@ public class MenuUI extends UI {
     private static final int EXIT_BUTTON_WIDTH = 250;
     private static final int EXIT_BUTTON_HEIGHT = 120;
     private static final int EXIT_BUTTON_Y = 100;
+
+    private static final int VOLUME_BUTTON_WIDTH = 75;
+    private static final int VOLUME_BUTTON_HEIGHT = 75;
+    private static final int VOLUME_BUTTON_Y = 645;
+
+    private static final int VOLUME_LABEL_WIDTH = 250;
+    private static final int VOLUME_LABEL_HEIGHT = 75;
+    private static final int VOLUME_LABEL_Y = 645;
 
     Texture playButtonActive;
     Texture playButtonInactive;
@@ -32,7 +42,12 @@ public class MenuUI extends UI {
     Texture playMediumButtonInactive;
     Texture playHardButtonActive;
     Texture playHardButtonInactive;
+    Texture volumeUpActive;
+    Texture volumeUpInactive;
+    Texture volumeDownActive;
+    Texture volumeDownInactive;
     Texture logo;
+    Texture volumeLabel;
 
     ScrollingBackground scrollingBackground = new ScrollingBackground();
 
@@ -40,16 +55,25 @@ public class MenuUI extends UI {
         scrollingBackground.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         scrollingBackground.setSpeedFixed(true);
         scrollingBackground.setSpeed(ScrollingBackground.DEFAULT_SPEED);
-
+        // Add images for the play buttons
         playEasyButtonActive = new Texture("PlayEasySelected.png");// "PlayEasySelected.png"
         playEasyButtonInactive = new Texture("PlayEasyUnSelected.png");
         playMediumButtonActive = new Texture("PlayMediumSelected.png");// "PlayMediumSelected.png"
         playMediumButtonInactive = new Texture("PlayMediumUnselected.png");
         playHardButtonActive = new Texture("PlayHardSelected.png");// "PlayHardSelected.png"
         playHardButtonInactive = new Texture("PlayHardUnselected.png");
+        // Add logo image for the title
         logo = new Texture("Title.png");
+        // Add images for the Exit button
         exitButtonActive = new Texture("ExitSelected.png");
         exitButtonInactive = new Texture("ExitUnselected.png");
+        // Add images for volume changer
+        volumeUpActive = new Texture("VolumePlusSelected.png");
+        volumeUpInactive = new Texture("VolumePlus.png");
+        volumeDownActive = new Texture("VolumeMinusSelected.png");
+        volumeDownInactive = new Texture("VolumeMinus.png");
+        volumeLabel = new Texture("Volume.png");
+
     }
 
     @Override
@@ -58,7 +82,7 @@ public class MenuUI extends UI {
         scrollingBackground.updateAndRender(delta, batch);
         batch.draw(logo, screenWidth / 2 - LOGO_WIDTH / 2, LOGO_Y, LOGO_WIDTH, LOGO_HEIGHT);
 
-        // Draw easy button
+        // Draw easy difficulty button
         float x = (float) (screenWidth / 2 - (PLAY_BUTTON_WIDTH * 1.5));
         if (mousePos.x < x + PLAY_BUTTON_WIDTH && mousePos.x > x &&
         // cur pos < top_height
@@ -68,7 +92,7 @@ public class MenuUI extends UI {
             batch.draw(playEasyButtonInactive, x, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
         }
 
-        // Draw medium play button
+        // Draw medium difficulty play button
         x = (float) (screenWidth / 2 - (PLAY_BUTTON_WIDTH * 0.5));
         if (mousePos.x < x + PLAY_BUTTON_WIDTH && mousePos.x > x &&
         // cur pos < top_height
@@ -78,7 +102,7 @@ public class MenuUI extends UI {
             batch.draw(playMediumButtonInactive, x, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
         }
 
-        // Draw Hard play butt(on
+        // Draw Hard difficulty play button
         x = (float) (screenWidth / 2 + (PLAY_BUTTON_WIDTH * 0.5));
         if (mousePos.x < x + PLAY_BUTTON_WIDTH && mousePos.x > x &&
         // cur pos < top_height
@@ -88,7 +112,7 @@ public class MenuUI extends UI {
             batch.draw(playHardButtonInactive, x, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
         }
 
-        // Otherwise draw the selected buttons
+        // Draw Exit game Buttons
         x = screenWidth / 2 - EXIT_BUTTON_WIDTH / 2;
         if (mousePos.x < x + EXIT_BUTTON_WIDTH && mousePos.x > x && mousePos.y < EXIT_BUTTON_Y + EXIT_BUTTON_HEIGHT
                 && mousePos.y > EXIT_BUTTON_Y) {
@@ -96,6 +120,28 @@ public class MenuUI extends UI {
         } else {
             batch.draw(exitButtonInactive, x, EXIT_BUTTON_Y, EXIT_BUTTON_WIDTH, EXIT_BUTTON_HEIGHT);
         }
+        // Draw Volume up Buttons
+        x = screenWidth - VOLUME_BUTTON_WIDTH * 2;
+        if (mousePos.x < x + VOLUME_BUTTON_WIDTH && mousePos.x > x
+                && mousePos.y < VOLUME_BUTTON_Y + VOLUME_BUTTON_HEIGHT && mousePos.y > EXIT_BUTTON_Y) {
+            batch.draw(volumeUpActive, x, VOLUME_BUTTON_Y, VOLUME_BUTTON_WIDTH, VOLUME_BUTTON_HEIGHT);
+        } else {
+            batch.draw(volumeUpInactive, x, VOLUME_BUTTON_Y, VOLUME_BUTTON_WIDTH, VOLUME_BUTTON_HEIGHT);
+        }
+
+        // Draw Volume down Buttons
+        x = screenWidth - VOLUME_BUTTON_WIDTH;
+        if (mousePos.x < x + VOLUME_BUTTON_WIDTH && mousePos.x > x
+                && mousePos.y < VOLUME_BUTTON_Y + VOLUME_BUTTON_HEIGHT && mousePos.y > VOLUME_BUTTON_Y) {
+            batch.draw(volumeDownActive, x, VOLUME_BUTTON_Y, VOLUME_BUTTON_WIDTH, VOLUME_BUTTON_HEIGHT);
+        } else {
+            batch.draw(volumeDownInactive, x, VOLUME_BUTTON_Y, VOLUME_BUTTON_WIDTH, VOLUME_BUTTON_HEIGHT);
+        }
+
+        // Draw Volume label
+        x = screenWidth - VOLUME_BUTTON_WIDTH * 2 - VOLUME_LABEL_WIDTH;
+        batch.draw(volumeLabel, x, VOLUME_LABEL_Y, VOLUME_LABEL_WIDTH, VOLUME_LABEL_HEIGHT);
+
         batch.end();
 
         playMusic();
@@ -155,6 +201,23 @@ public class MenuUI extends UI {
         if (clickPos.x < x + EXIT_BUTTON_WIDTH && clickPos.x > x && clickPos.y < EXIT_BUTTON_Y + EXIT_BUTTON_HEIGHT
                 && clickPos.y > EXIT_BUTTON_Y) {
             Gdx.app.exit();
+        }
+
+        // If the volume up is clicked, turn the volume up
+        x = screenWidth - VOLUME_BUTTON_WIDTH * 2;
+        if (clickPos.x < x + VOLUME_BUTTON_WIDTH && clickPos.x > x
+                && clickPos.y < VOLUME_BUTTON_Y + VOLUME_BUTTON_HEIGHT && clickPos.y > VOLUME_BUTTON_Y) {
+            volumeUp();
+            playMusic();
+        }
+
+        // If the volume down is clicked, turn the volume down
+        x = screenWidth - VOLUME_BUTTON_WIDTH;
+        if (clickPos.x < x + VOLUME_BUTTON_WIDTH && clickPos.x > x
+                && clickPos.y < VOLUME_BUTTON_Y + VOLUME_BUTTON_HEIGHT && clickPos.y > VOLUME_BUTTON_Y) {
+
+            volumeDown();
+            playMusic();
         }
 
     }

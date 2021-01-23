@@ -76,6 +76,9 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 		// Set the app's input processor
 		Gdx.input.setInputProcessor(this);
+
+		// Set initial volume
+		GameData.music.setVolume(0.4f);
 	}
 
 	public void spawnObstacles() {
