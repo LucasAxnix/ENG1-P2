@@ -373,6 +373,16 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 					player.acceleration += 10f;
 					player.stamina +=20f;
 				}
+				for (AI opponent: opponents){
+					if (opponent.boatBody == body && !opponent.hasFinished()){
+						//increase the health, speed, mane
+						opponent.robustness += 20f;
+						opponent.current_speed += 50f;
+						opponent.maneuverability += 30f;
+						opponent.acceleration += 10f;
+						opponent.stamina +=20f;
+					}
+				}
 			}
 
 			toBeRemovedBodies.clear();
