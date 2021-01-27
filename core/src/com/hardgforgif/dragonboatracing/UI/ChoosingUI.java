@@ -147,7 +147,9 @@ public class ChoosingUI extends UI{
 
                 // Change the music
                 GameData.music.stop();
+                float current_volume = GameData.music.getVolume();
                 GameData.music = Gdx.audio.newMusic(Gdx.files.internal("Love_Drama.ogg"));
+                GameData.music.setVolume(current_volume);
 
                 // Set the game state to the game play state
                 GameData.choosingBoatState = false;

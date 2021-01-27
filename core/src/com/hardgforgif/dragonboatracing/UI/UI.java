@@ -45,7 +45,7 @@ public abstract class UI {
 
     public void volumeUp() {
         float current_volume = GameData.music.getVolume();
-        if (current_volume < 1f) {
+        if (current_volume < 0.9f) {
             GameData.music.setVolume(current_volume + 0.1f);
 
         }
@@ -54,7 +54,7 @@ public abstract class UI {
 
     public void volumeDown() {
         float current_volume = GameData.music.getVolume();
-        if (current_volume > 0f) {
+        if (current_volume > 0.1f) {
             GameData.music.setVolume(current_volume - 0.1f);
 
         }
