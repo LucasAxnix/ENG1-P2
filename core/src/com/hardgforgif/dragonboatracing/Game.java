@@ -31,6 +31,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 	private ArrayList<Body> toBeRemovedBodies = new ArrayList<>();
 	private ArrayList<Body> toUpdateHealth = new ArrayList<>();
+	private ArrayList<Body> toGetBonus = new ArrayList<>();
 
 	@Override
 	public void create() {
@@ -103,6 +104,14 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 					toBeRemovedBodies.add(fixtureA.getBody());
 				} else if (fixtureB.getBody().getUserData() instanceof Obstacle) {
 					toBeRemovedBodies.add(fixtureB.getBody());
+				}
+
+				if (fixtureA.getBody().getUserData() instanceof bonus){
+					toBeRemovedBodies.add(fixtureA.getBody());
+					toGetBonus.add(fixtureB.getBody());//is fixtureA is instance of bonus, then B is the boat
+				} else if (fixtureB.getBody().getUserData() instanceof bonus){
+					toBeRemovedBodies.add(fixtureB.getBody());
+					toGetBonus.add(fixtureA.getBody());
 				}
 
 				if (fixtureA.getBody().getUserData() instanceof Boat) {
@@ -303,9 +312,20 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 							obstacle.obstacleBody = null;
 						}
 
+				// Find the bonus that have to be removed
+				for (Lane lane : map[GameData.currentLeg].lanes){
+
+					for (bonus bonus: lane.bonuses){
+						if (bonus.bonusBody == body){
+							bonus.bonusBody = null;
+						}
+					}
+				}
+
 				// Remove the body from the world to avoid other collisions with it
 				world[GameData.currentLeg].destroyBody(body);
 			}
+
 
 			// Iterate through the bodies marked to be damaged after a collision
 			for (Body body : toUpdateHealth) {
@@ -347,9 +367,21 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 				}
 
 			}
+			//Iterate through the bodies marked to get bonus
+			for (Body body: toGetBonus){
+				if (player.boatBody == body && !player.hasFinished()){
+					//increase the health, speed, mane
+					player.robustness += 20f;
+					player.current_speed += 50f;
+					player.maneuverability += 30f;
+					player.acceleration += 10f;
+					player.stamina +=20f;
+				}
+			}
 
 			toBeRemovedBodies.clear();
 			toUpdateHealth.clear();
+			toGetBonus.clear();
 
 			// Advance the game world physics
 			world[GameData.currentLeg].step(1f / 60f, 6, 2);
@@ -378,6 +410,14 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 					if (obstacle.obstacleBody != null)
 						obstacle.drawObstacle(batch);
 				}
+
+			// Render the bonus that weren't destroyed yet
+			for (Lane lane: map[GameData.currentLeg].lanes){
+				for (bonus bonus: lane.bonuses){
+					if (bonus.bonusBody != null)
+						bonus.drawBonus(batch);
+				}
+			}
 
 			// Update the camera at the player's position
 			updateCamera(player);
