@@ -60,15 +60,6 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			// Create the collision with the land
 			map[i].createMapCollisions("CollisionLayerLeft", world[i]);
 			map[i].createMapCollisions("CollisionLayerRight", world[i]);
-
-			// Create the lanes, and the obstacles in the physics game world
-			map[i].createLanes(world[i]);
-
-			// Create the finish line
-			map[i].createFinishLine("finishLine.png");
-
-			// Create a new collision handler for the world
-			createContactListener(world[i]);
 		}
 
 		// Initialize the camera
@@ -83,8 +74,13 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	}
 
 	public void spawnObstacles() {
+		// Create the lanes, and the obstacles in the physics game world
 		for (int i = 0; i < 3; i++) {
 			map[i].createLanes(world[i]);
+			// Create a new collision handler for the world
+			createContactListener(world[i]);
+			// Create the finish line
+			map[i].createFinishLine("finishLine.png");
 		}
 	}
 
