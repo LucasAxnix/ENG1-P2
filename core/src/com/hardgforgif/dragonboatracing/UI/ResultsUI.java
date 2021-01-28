@@ -130,7 +130,7 @@ public class ResultsUI extends UI{
             // If the game is over due to player's dnf or victory, switch to the endgame screen
             if (GameData.currentLeg == 2 || playerResult == Float.MAX_VALUE || GameData.standings[0] == 4){
                 GameData.showResultsState = false;
-                GameData.GameOverState = true;
+                GameData.gameOverState = true;
                 GameData.currentUI = new GameOverUI();
             }
             // Otherwise prepare for the next leg

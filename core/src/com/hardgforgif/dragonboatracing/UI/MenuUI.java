@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.hardgforgif.dragonboatracing.GameData;
+import com.hardgforgif.dragonboatracing.SaveGame.SaveGameData;
 import com.hardgforgif.dragonboatracing.core.Player;
 
 public class MenuUI extends UI {
@@ -18,11 +19,11 @@ public class MenuUI extends UI {
 
     private static final int PLAY_BUTTON_WIDTH = 300;
     private static final int PLAY_BUTTON_HEIGHT = 120;
-    private static final int PLAY_BUTTON_Y = 230;
+    private static final int PLAY_BUTTON_Y = 150;
 
     private static final int EXIT_BUTTON_WIDTH = 250;
     private static final int EXIT_BUTTON_HEIGHT = 120;
-    private static final int EXIT_BUTTON_Y = 100;
+    private static final int EXIT_BUTTON_Y = 20;
 
     private static final int VOLUME_BUTTON_WIDTH = 75;
     private static final int VOLUME_BUTTON_HEIGHT = 75;
@@ -31,6 +32,10 @@ public class MenuUI extends UI {
     private static final int VOLUME_LABEL_WIDTH = 250;
     private static final int VOLUME_LABEL_HEIGHT = 75;
     private static final int VOLUME_LABEL_Y = 645;
+
+    private static final int LOAD_BUTTON_WIDTH = 250;
+    private static final int LOAD_BUTTON_HEIGHT = 120;
+    private static final int LOAD_BUTTON_Y = 280;
 
     Texture playButtonActive;
     Texture playButtonInactive;
@@ -48,6 +53,9 @@ public class MenuUI extends UI {
     Texture volumeDownInactive;
     Texture logo;
     Texture volumeLabel;
+
+    Texture loadGameInactive;
+    Texture loadGameActive;
 
     ScrollingBackground scrollingBackground = new ScrollingBackground();
 
@@ -74,6 +82,10 @@ public class MenuUI extends UI {
         volumeDownInactive = new Texture("VolumeMinus.png");
         volumeLabel = new Texture("Volume.png");
 
+        loadGameInactive = new Texture("LoadUnselected.png");
+        loadGameActive = new Texture("LoadSelected.png");
+
+        GameData.spawnedObstacles = false;
     }
 
     @Override
@@ -142,6 +154,16 @@ public class MenuUI extends UI {
         x = screenWidth - VOLUME_BUTTON_WIDTH * 2 - VOLUME_LABEL_WIDTH;
         batch.draw(volumeLabel, x, VOLUME_LABEL_Y, VOLUME_LABEL_WIDTH, VOLUME_LABEL_HEIGHT);
 
+        // Draw load game button
+        x = screenWidth / 2 - LOAD_BUTTON_WIDTH / 2;
+        if (mousePos.x < x + LOAD_BUTTON_WIDTH && mousePos.x > x &&
+        // cur pos < top_height
+                mousePos.y < LOAD_BUTTON_Y + LOAD_BUTTON_HEIGHT && mousePos.y > LOAD_BUTTON_Y) {
+            batch.draw(loadGameActive, x, LOAD_BUTTON_Y, LOAD_BUTTON_WIDTH, LOAD_BUTTON_HEIGHT);
+        } else {
+            batch.draw(loadGameInactive, x, LOAD_BUTTON_Y, LOAD_BUTTON_WIDTH, LOAD_BUTTON_HEIGHT);
+        }
+
         batch.end();
 
         playMusic();
@@ -166,6 +188,7 @@ public class MenuUI extends UI {
             // Set difficulty for level ad AI
             GameData.difficulty = "EASY";
             GameData.level = new float[] { 0.87f, 0.89f, 0.92f };
+            GameData.isFromSave = false;
         }
 
         // If the play medium button is clicked
@@ -180,6 +203,7 @@ public class MenuUI extends UI {
             // Set difficulty for level and AI
             GameData.difficulty = "MEDIUM";
             GameData.level = new float[] { 0.92f, 0.97f, 1f };
+            GameData.isFromSave = false;
         }
 
         // If the play hard button is clicked
@@ -194,6 +218,7 @@ public class MenuUI extends UI {
             // Set difficulty for level and AI
             GameData.difficulty = "HARD";
             GameData.level = new float[] { 1f, 1.05f, 1.07f };
+            GameData.isFromSave = false;
         }
 
         // If the exit button is clicked, close the game
@@ -220,5 +245,14 @@ public class MenuUI extends UI {
             playMusic();
         }
 
+        x = screenWidth / 2 - LOAD_BUTTON_WIDTH / 2;
+        if (clickPos.x < x + LOAD_BUTTON_WIDTH && clickPos.x > x
+                && clickPos.y < LOAD_BUTTON_Y + LOAD_BUTTON_HEIGHT && clickPos.y > LOAD_BUTTON_Y) {
+
+            SaveGameData.LoadSave();
+            GameData.mainMenuState = false;
+            GameData.gamePlayState = true;
+            GameData.currentUI = new GamePlayUI();
+        }
     }
 }

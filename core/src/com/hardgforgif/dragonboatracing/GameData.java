@@ -15,7 +15,8 @@ public class GameData {
     public static boolean gamePlayState = false;
     public static boolean showResultsState = false;
     public static boolean resetGameState = false;
-    public static boolean GameOverState = false;
+    public static boolean gameOverState = false;
+    public static boolean paused = false;
 
     // Create the game UI and the game music
     public static UI currentUI = new MenuUI();
@@ -52,5 +53,8 @@ public class GameData {
 
     // Difficulty constants for the difficulty chosen by the player
     public static String difficulty = "Error: Difficulty not set";
+    public static Boolean spawnedObstacles = false;
 
+    public static Game gameInstance;
+    public static boolean isFromSave;
 }

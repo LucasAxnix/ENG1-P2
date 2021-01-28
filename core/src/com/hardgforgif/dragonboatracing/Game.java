@@ -3,11 +3,14 @@ package com.hardgforgif.dragonboatracing;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
+import com.hardgforgif.dragonboatracing.SaveGame.SaveGameData;
 import com.hardgforgif.dragonboatracing.UI.GamePlayUI;
 import com.hardgforgif.dragonboatracing.UI.MenuUI;
 import com.hardgforgif.dragonboatracing.UI.ResultsUI;
@@ -23,7 +26,6 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	private Batch UIbatch;
 	private OrthographicCamera camera;
 	private World[] world;
-	private Boolean spawnedObstacles = false;
 
 	private Vector2 mousePosition = new Vector2();
 	private Vector2 clickPosition = new Vector2();
@@ -35,6 +37,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public void create() {
+		GameData.gameInstance = this;
+
 		// Initialize the sprite batches
 		batch = new SpriteBatch();
 		UIbatch = new SpriteBatch();
@@ -73,10 +77,30 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		GameData.music.setVolume(0.4f);
 	}
 
+	public void saveGame() {
+		SaveGameData.SaveGame(player, opponents, map);
+	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+
+	public void setOpponent(AI opponent, int lanePos) {
+		opponents[lanePos] = opponent;
+	}
+
+	public Map[] getMap() {
+		return map;
+	}
+
+	public World[] getWorld() {
+		return world;
+	}
+
 	public void spawnObstacles() {
 		// Create the lanes, and the obstacles in the physics game world
 		for (int i = 0; i < 3; i++) {
-			map[i].createLanes(world[i]);
+			map[i].createLanes(world[i], i);
 			// Create a new collision handler for the world
 			createContactListener(world[i]);
 			// Create the finish line
@@ -102,10 +126,10 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 					toBeRemovedBodies.add(fixtureB.getBody());
 				}
 
-				if (fixtureA.getBody().getUserData() instanceof bonus){
+				if (fixtureA.getBody().getUserData() instanceof bonus) {
 					toBeRemovedBodies.add(fixtureA.getBody());
-					toGetBonus.add(fixtureB.getBody());//is fixtureA is instance of bonus, then B is the boat
-				} else if (fixtureB.getBody().getUserData() instanceof bonus){
+					toGetBonus.add(fixtureB.getBody());// is fixtureA is instance of bonus, then B is the boat
+				} else if (fixtureB.getBody().getUserData() instanceof bonus) {
 					toBeRemovedBodies.add(fixtureB.getBody());
 					toGetBonus.add(fixtureA.getBody());
 				}
@@ -139,7 +163,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	 * 
 	 * @param player The target player
 	 */
-	private void updateCamera(Player player) {
+	private void updateCamera() {
 		camera.position.set(camera.position.x, player.boatSprite.getY() + 600, 0);
 		camera.update();
 	}
@@ -261,7 +285,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		// If the game is in one of the static state
-		if (GameData.mainMenuState || GameData.choosingBoatState || GameData.GameOverState) {
+		if (GameData.mainMenuState || GameData.choosingBoatState || GameData.gameOverState) {
 			// Draw the UI and wait for the input
 			GameData.currentUI.drawUI(UIbatch, mousePosition, Gdx.graphics.getWidth(), Gdx.graphics.getDeltaTime());
 			GameData.currentUI.getInput(Gdx.graphics.getWidth(), clickPosition);
@@ -270,134 +294,149 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 		// Otherwise, if we are in the game play state
 		else if (GameData.gamePlayState) {
-			if (!spawnedObstacles) {
-				spawnObstacles();
-				spawnedObstacles = true;
-			}
-			// If it's the first iteration in this state, the boats need to be created at
-			// their starting positions
-			if (player == null) {
-				// Create the player boat
-				int playerBoatType = GameData.boatTypes[0];
-				player = new Player(GameData.boatsStats[playerBoatType][0], GameData.boatsStats[playerBoatType][1],
-						GameData.boatsStats[playerBoatType][2], GameData.boatsStats[playerBoatType][3], playerBoatType,
-						map[GameData.currentLeg].lanes[0]);
-				player.createBoatBody(world[GameData.currentLeg], GameData.startingPoints[0][0],
-						GameData.startingPoints[0][1], "Boat1.json");
-				// Create the AI boats
-				for (int i = 1; i <= 3; i++) {
-					int AIBoatType = GameData.boatTypes[i];
-					opponents[i - 1] = new AI(GameData.boatsStats[AIBoatType][0], GameData.boatsStats[AIBoatType][1],
-							GameData.boatsStats[AIBoatType][2], GameData.boatsStats[AIBoatType][3], AIBoatType,
-							map[GameData.currentLeg].lanes[i]);
-					opponents[i - 1].createBoatBody(world[GameData.currentLeg], GameData.startingPoints[i][0],
-							GameData.startingPoints[i][1], "Boat1.json");
-
+			if (!GameData.paused) {
+				if (!GameData.spawnedObstacles) {
+					spawnObstacles();
+					GameData.spawnedObstacles = true;
 				}
+				// If it's the first iteration in this state, the boats need to be created at
+				// their starting positions
+				if (player == null) {
+					// Create the player boat
+					int playerBoatType = GameData.boatTypes[0];
+					player = new Player(GameData.boatsStats[playerBoatType][0], GameData.boatsStats[playerBoatType][1],
+							GameData.boatsStats[playerBoatType][2], GameData.boatsStats[playerBoatType][3],
+							playerBoatType, map[GameData.currentLeg].lanes[0]);
+					player.createBoatBody(world[GameData.currentLeg], GameData.startingPoints[0][0],
+							GameData.startingPoints[0][1], "Boat1.json");
+					// Create the AI boats
+					for (int i = 1; i <= 3; i++) {
+						int AIBoatType = GameData.boatTypes[i];
+						opponents[i - 1] = new AI(GameData.boatsStats[AIBoatType][0],
+								GameData.boatsStats[AIBoatType][1], GameData.boatsStats[AIBoatType][2],
+								GameData.boatsStats[AIBoatType][3], AIBoatType, map[GameData.currentLeg].lanes[i],
+								false);
+						opponents[i - 1].createBoatBody(world[GameData.currentLeg], GameData.startingPoints[i][0],
+								GameData.startingPoints[i][1], "Boat1.json");
 
-			}
-
-			// Iterate through the bodies that need to be removed from the world after a
-			// collision
-			for (Body body : toBeRemovedBodies) {
-				// Find the obstacle that has this body and mark it as null
-				// so it's sprite doesn't get rendered in future frames
-				for (Lane lane : map[GameData.currentLeg].lanes)
-					for (Obstacle obstacle : lane.obstacles)
-						if (obstacle.obstacleBody == body) {
-							obstacle.obstacleBody = null;
-						}
-
-				// Find the bonus that have to be removed
-				for (Lane lane : map[GameData.currentLeg].lanes){
-
-					for (bonus bonus: lane.bonuses){
-						if (bonus.bonusBody == body){
-							bonus.bonusBody = null;
-						}
 					}
+
 				}
 
-				// Remove the body from the world to avoid other collisions with it
-				world[GameData.currentLeg].destroyBody(body);
-			}
+				// Iterate through the bodies that need to be removed from the world after a
+				// collision
+				for (Body body : toBeRemovedBodies) {
+					// Find the obstacle that has this body and mark it as null
+					// so it's sprite doesn't get rendered in future frames
+					for (Lane lane : map[GameData.currentLeg].lanes)
+						for (Obstacle obstacle : lane.obstacles)
+							if (obstacle.obstacleBody == body) {
+								obstacle.obstacleBody = null;
+							}
 
+					// Find the bonus that have to be removed
+					for (Lane lane : map[GameData.currentLeg].lanes) {
 
-			// Iterate through the bodies marked to be damaged after a collision
-			for (Body body : toUpdateHealth) {
-				// if it's the player body
-				if (player.boatBody == body && !player.hasFinished()) {
-					// Reduce the health and the speed
-					player.robustness -= 10f;
-					player.current_speed -= 30f;
-
-					// If all the health is lost
-					if (player.robustness <= 0 && GameData.results.size() < 4) {
-						// Remove the body from the world, but keep it's sprite in place
-						world[GameData.currentLeg].destroyBody(player.boatBody);
-
-						// Add a DNF result
-						GameData.results.add(new Float[] { 0f, Float.MAX_VALUE });
-
-						// Transition to the show result screen
-						GameData.showResultsState = true;
-						GameData.currentUI = new ResultsUI();
-					}
-				}
-
-				// Otherwise, one of the AI has to be updated similarly
-				else {
-					for (int i = 0; i < 3; i++) {
-						if (opponents[i].boatBody == body && !opponents[i].hasFinished()) {
-
-							opponents[i].robustness -= 10f;
-							opponents[i].current_speed -= 30f;
-
-							if (opponents[i].robustness < 0 && GameData.results.size() < 4) {
-								world[GameData.currentLeg].destroyBody(opponents[i].boatBody);
-								GameData.results.add(new Float[] { Float.valueOf(i + 1), Float.MAX_VALUE });
+						for (bonus bonus : lane.bonuses) {
+							if (bonus.bonusBody == body) {
+								bonus.bonusBody = null;
 							}
 						}
+					}
 
+					// Remove the body from the world to avoid other collisions with it
+					world[GameData.currentLeg].destroyBody(body);
+				}
+
+				// Iterate through the bodies marked to be damaged after a collision
+				for (Body body : toUpdateHealth) {
+					// if it's the player body
+					if (player.boatBody == body && !player.hasFinished()) {
+						// Reduce the health and the speed
+						player.robustness -= 10f;
+						player.current_speed -= 30f;
+
+						// If all the health is lost
+						if (player.robustness <= 0 && GameData.results.size() < 4) {
+							// Remove the body from the world, but keep it's sprite in place
+							world[GameData.currentLeg].destroyBody(player.boatBody);
+
+							// Add a DNF result
+							GameData.results.add(new Float[] { 0f, Float.MAX_VALUE });
+
+							// Transition to the show result screen
+							GameData.showResultsState = true;
+							GameData.currentUI = new ResultsUI();
+						}
+					}
+					// Otherwise, one of the AI has to be updated similarly
+					else {
+						for (int i = 0; i < 3; i++) {
+							if (opponents[i].boatBody == body && !opponents[i].hasFinished()) {
+
+								opponents[i].robustness -= 10f;
+								opponents[i].current_speed -= 30f;
+
+								if (opponents[i].robustness < 0 && GameData.results.size() < 4) {
+									world[GameData.currentLeg].destroyBody(opponents[i].boatBody);
+									GameData.results.add(new Float[] { Float.valueOf(i + 1), Float.MAX_VALUE });
+								}
+							}
+
+						}
 					}
 				}
 
-			}
-			//Iterate through the bodies marked to get bonus
-			for (Body body: toGetBonus){
-				if (player.boatBody == body && !player.hasFinished()){
-					//increase the health, speed, mane
-					player.robustness += 20f;
-					player.current_speed += 50f;
-					player.maneuverability += 30f;
-					player.acceleration += 10f;
-					player.stamina +=20f;
-				}
-				for (AI opponent: opponents){
-					if (opponent.boatBody == body && !opponent.hasFinished()){
-						//increase the health, speed, mane
-						opponent.robustness += 20f;
-						opponent.current_speed += 50f;
-						opponent.maneuverability += 30f;
-						opponent.acceleration += 10f;
-						opponent.stamina +=20f;
+				// Iterate through the bodies marked to get bonus
+				for (Body body : toGetBonus) {
+					if (player.boatBody == body && !player.hasFinished()) {
+						// increase the health, speed, mane
+						player.robustness += 20f;
+						player.current_speed += 50f;
+						player.maneuverability += 30f;
+						player.acceleration += 10f;
+						player.stamina += 20f;
+					}
+					for (AI opponent : opponents) {
+						if (opponent.boatBody == body && !opponent.hasFinished()) {
+							// increase the health, speed, mane
+							opponent.robustness += 20f;
+							opponent.current_speed += 50f;
+							opponent.maneuverability += 30f;
+							opponent.acceleration += 10f;
+							opponent.stamina += 20f;
+						}
 					}
 				}
+
+				toBeRemovedBodies.clear();
+				toUpdateHealth.clear();
+				toGetBonus.clear();
+
+				// Advance the game world physics
+				world[GameData.currentLeg].step(1f / 60f, 6, 2);
+				// Update the timer
+				GameData.currentTimer += Gdx.graphics.getDeltaTime();
+
+				// Update the player's and the AI's movement
+				player.updatePlayer(pressedKeys, Gdx.graphics.getDeltaTime());
+				for (AI opponent : opponents)
+					opponent.updateAI(Gdx.graphics.getDeltaTime());
+
+				// If it's been 15 seconds since the winner completed the race, dnf all boats
+				// who haven't finished yet
+				// Then transition to the result state
+				if (GameData.results.size() > 0 && GameData.results.size() < 4
+						&& GameData.currentTimer > GameData.results.get(0)[1] + 15f) {
+					dnfRemainingBoats();
+					GameData.showResultsState = true;
+					GameData.currentUI = new ResultsUI();
+				}
+				// Otherwise keep checking for new results
+				else {
+					checkForResults();
+				}
 			}
-
-			toBeRemovedBodies.clear();
-			toUpdateHealth.clear();
-			toGetBonus.clear();
-
-			// Advance the game world physics
-			world[GameData.currentLeg].step(1f / 60f, 6, 2);
-			// Update the timer
-			GameData.currentTimer += Gdx.graphics.getDeltaTime();
-
-			// Update the player's and the AI's movement
-			player.updatePlayer(pressedKeys, Gdx.graphics.getDeltaTime());
-			for (AI opponent : opponents)
-				opponent.updateAI(Gdx.graphics.getDeltaTime());
 
 			// Set the camera as the batches projection matrix
 			batch.setProjectionMatrix(camera.combined);
@@ -418,34 +457,20 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 				}
 
 			// Render the bonus that weren't destroyed yet
-			for (Lane lane: map[GameData.currentLeg].lanes){
-				for (bonus bonus: lane.bonuses){
+			for (Lane lane : map[GameData.currentLeg].lanes) {
+				for (bonus bonus : lane.bonuses) {
 					if (bonus.bonusBody != null)
 						bonus.drawBonus(batch);
 				}
 			}
 
 			// Update the camera at the player's position
-			updateCamera(player);
+			updateCamera();
 
 			updatePenalties();
 
 			// Update the standings of each boat
 			updateStandings();
-
-			// If it's been 15 seconds since the winner completed the race, dnf all boats
-			// who haven't finished yet
-			// Then transition to the result state
-			if (GameData.results.size() > 0 && GameData.results.size() < 4
-					&& GameData.currentTimer > GameData.results.get(0)[1] + 15f) {
-				dnfRemainingBoats();
-				GameData.showResultsState = true;
-				GameData.currentUI = new ResultsUI();
-			}
-			// Otherwise keep checking for new results
-			else {
-				checkForResults();
-			}
 
 			// Choose which UI to display based on the current state
 			if (!GameData.showResultsState)
@@ -454,73 +479,75 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 				GameData.currentUI.drawUI(UIbatch, mousePosition, Gdx.graphics.getWidth(), Gdx.graphics.getDeltaTime());
 				GameData.currentUI.getInput(Gdx.graphics.getWidth(), clickPosition);
 			}
-
-		}
-
-		// Otherwise we need need to reset elements of the game to prepare for the next
-		// race
-		else if (GameData.resetGameState) {
-			player = null;
-			for (int i = 0; i < 3; i++)
-
-				opponents[i] = null;
-
-			GameData.results.clear();
-			GameData.currentTimer = 0f;
-			GameData.penalties = new float[4];
-
-			// If we're coming from the result screen, then we need to advance to the next
-			// leg
-			if (GameData.showResultsState) {
-				GameData.currentLeg += 1;
-				GameData.showResultsState = false;
-				GameData.gamePlayState = true;
-				GameData.currentUI = new GamePlayUI();
-
+			if (GameData.paused) {
+				GameData.currentUI.drawUI(UIbatch, mousePosition, Gdx.graphics.getWidth(), Gdx.graphics.getDeltaTime());
+				GameData.currentUI.getInput(Gdx.graphics.getWidth(), clickPosition);
 			}
-			// Otherwise we're coming from the endgame screen so we need to return to the
-			// main menu
-			else {
-				camera.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
-				camera.update();
-				// Reset everything for the next game
-				world = new World[3];
-				map = new Map[3];
-				for (int i = 0; i < 3; i++) {
-					// Initialize the physics game World
-					world[i] = new World(new Vector2(0f, 0f), true);
 
-					// Initialize the map
-					map[i] = new Map("Map1/Map1.tmx", Gdx.graphics.getWidth());
+			// Otherwise we need need to reset elements of the game to prepare for the next
+			// race
+			if (GameData.resetGameState) {
+				player = null;
+				for (int i = 0; i < 3; i++)
 
-					// Calculate the ratio between pixels, meters and tiles
-					GameData.TILES_TO_METERS = map[i].getTilesToMetersRatio();
-					GameData.PIXELS_TO_TILES = 1 / (GameData.METERS_TO_PIXELS * GameData.TILES_TO_METERS);
+					opponents[i] = null;
 
-					// Create the collision with the land
-					map[i].createMapCollisions("CollisionLayerLeft", world[i]);
-					map[i].createMapCollisions("CollisionLayerRight", world[i]);
+				GameData.results.clear();
+				GameData.currentTimer = 0f;
+				GameData.penalties = new float[4];
 
-					// Create the lanes, and the obstacles in the physics game world
-					map[i].createLanes(world[i]);
+				// If we're coming from the result screen, then we need to advance to the next
+				// leg
+				if (GameData.showResultsState) {
+					GameData.currentLeg += 1;
+					GameData.showResultsState = false;
+					GameData.gamePlayState = true;
+					GameData.currentUI = new GamePlayUI();
 
-					// Create the finish line
-					map[i].createFinishLine("finishLine.png");
-
-					// Create a new collision handler for the world
-					createContactListener(world[i]);
 				}
-				GameData.currentLeg = 0;
-				GameData.mainMenuState = true;
-				GameData.currentUI = new MenuUI();
+				// Otherwise we're coming from the endgame screen so we need to return to the
+				// main menu
+				else {
+					camera.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
+					camera.update();
+					// Reset everything for the next game
+					world = new World[3];
+					map = new Map[3];
+					for (int i = 0; i < 3; i++) {
+						// Initialize the physics game World
+						world[i] = new World(new Vector2(0f, 0f), true);
+
+						// Initialize the map
+						map[i] = new Map("Map1/Map1.tmx", Gdx.graphics.getWidth());
+
+						// Calculate the ratio between pixels, meters and tiles
+						GameData.TILES_TO_METERS = map[i].getTilesToMetersRatio();
+						GameData.PIXELS_TO_TILES = 1 / (GameData.METERS_TO_PIXELS * GameData.TILES_TO_METERS);
+
+						// Create the collision with the land
+						map[i].createMapCollisions("CollisionLayerLeft", world[i]);
+						map[i].createMapCollisions("CollisionLayerRight", world[i]);
+
+						// Create the lanes, and the obstacles in the physics game world
+						map[i].createLanes(world[i], i);
+
+						// Create the finish line
+						map[i].createFinishLine("finishLine.png");
+
+						// Create a new collision handler for the world
+						createContactListener(world[i]);
+					}
+					GameData.currentLeg = 0;
+					GameData.mainMenuState = true;
+					GameData.currentUI = new MenuUI();
+				}
+				GameData.resetGameState = false;
 			}
-			GameData.resetGameState = false;
 
+			// If we haven't clicked anywhere in the last frame, reset the click position
+			if (clickPosition.x != 0f && clickPosition.y != 0f)
+				clickPosition.set(0f, 0f);
 		}
-
-		// If we haven't clicked anywhere in the last frame, reset the click position
-		if (clickPosition.x != 0f && clickPosition.y != 0f)
-			clickPosition.set(0f, 0f);
 	}
 
 	public void dispose() {
@@ -537,6 +564,9 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			pressedKeys[2] = true;
 		if (keycode == Input.Keys.D)
 			pressedKeys[3] = true;
+		if (keycode == Input.Keys.ESCAPE)
+			if (!GameData.showResultsState)
+				GameData.paused = !GameData.paused;
 		return true;
 	}
 
@@ -560,7 +590,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		Vector3 position = camera.unproject(new Vector3(screenX, screenY, 0));
+		Vector3 position = new Vector3(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), 0);
 		clickPosition.set(position.x, position.y);
 		return true;
 	}
@@ -577,7 +607,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		Vector3 position = camera.unproject(new Vector3(screenX, screenY, 0));
+		Vector3 position = new Vector3(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY(), 0);
 		mousePosition.set(position.x, position.y);
 		return true;
 	}

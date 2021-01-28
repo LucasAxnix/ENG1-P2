@@ -116,7 +116,7 @@ public class Map {
      * 
      * @param world World to spawn the obstacles in
      */
-    public void createLanes(World world) {
+    public void createLanes(World world, int worldLeg) {
         int nrObstables = 15;
         if (GameData.difficulty == "EASY") {
             nrObstables *= 1;
@@ -132,7 +132,6 @@ public class Map {
 
         lanes[0] = new Lane(mapHeight, leftLayer, rightLayer, nrObstables, 30);
         lanes[0].constructBoundries(unitScale);
-        lanes[0].spawnObstacles(world, mapHeight / GameData.PIXELS_TO_TILES);
         lanes[0].spawnBonus(world, mapHeight / GameData.PIXELS_TO_TILES);
 
         leftLayer = tiledMap.getLayers().get("Lane1");
@@ -140,7 +139,6 @@ public class Map {
 
         lanes[1] = new Lane(mapHeight, leftLayer, rightLayer, nrObstables,30);
         lanes[1].constructBoundries(unitScale);
-        lanes[1].spawnObstacles(world, mapHeight / GameData.PIXELS_TO_TILES);
         lanes[1].spawnBonus(world, mapHeight / GameData.PIXELS_TO_TILES);
 
         leftLayer = tiledMap.getLayers().get("Lane2");
@@ -148,7 +146,6 @@ public class Map {
 
         lanes[2] = new Lane(mapHeight, leftLayer, rightLayer, nrObstables,30);
         lanes[2].constructBoundries(unitScale);
-        lanes[2].spawnObstacles(world, mapHeight / GameData.PIXELS_TO_TILES);
         lanes[2].spawnBonus(world, mapHeight / GameData.PIXELS_TO_TILES);
 
         leftLayer = tiledMap.getLayers().get("Lane3");
@@ -156,9 +153,18 @@ public class Map {
 
         lanes[3] = new Lane(mapHeight, leftLayer, rightLayer, nrObstables,30);
         lanes[3].constructBoundries(unitScale);
-        lanes[3].spawnObstacles(world, mapHeight / GameData.PIXELS_TO_TILES);
         lanes[3].spawnBonus(world, mapHeight / GameData.PIXELS_TO_TILES);
 
+        if (GameData.isFromSave && worldLeg <= GameData.currentLeg) return;
+
+        spawnObstacles(world);
+    }
+
+    public void spawnObstacles(World world) {
+        lanes[0].spawnObstacles(world, mapHeight / GameData.PIXELS_TO_TILES);
+        lanes[1].spawnObstacles(world, mapHeight / GameData.PIXELS_TO_TILES);
+        lanes[2].spawnObstacles(world, mapHeight / GameData.PIXELS_TO_TILES);
+        lanes[3].spawnObstacles(world, mapHeight / GameData.PIXELS_TO_TILES);
     }
 
     /**

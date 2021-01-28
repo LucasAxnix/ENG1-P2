@@ -35,12 +35,14 @@ public class Boat {
     public float leftLimit;
     public float rightLimit;
 
+    public int boatType;
 
     public Boat(float robustness, float speed, float acceleration, float maneuverability, int boatType, Lane lane) {
         this.robustness = robustness;
         this.speed = speed;
         this.acceleration = acceleration;
         this.maneuverability = maneuverability;
+        this.boatType = boatType;
         turningSpeed *= this.maneuverability / 100;
 
 
@@ -212,7 +214,7 @@ public class Boat {
     public void rotateBoat(float angle){
         // Calculate the difference between the target angle and the current rotation of the boat
         float angleDifference = angle - boatBody.getAngle() * MathUtils.radDeg;
-
+ 
         if (Math.abs(angleDifference) < turningSpeed) {
             boatBody.setTransform(boatBody.getPosition(), angle * MathUtils.degRad);
             return;

@@ -15,6 +15,7 @@ public class Obstacle {
     public Sprite obstacleSprite;
     private Texture obstacleTexture;
     public Body obstacleBody;
+    public String obstacleType;
 
     public Obstacle(String textureName){
         obstacleTexture = new Texture(textureName);
@@ -28,6 +29,8 @@ public class Obstacle {
      * @param bodyFile the name of the box2D editor json file for the body fixture
      */
     public void createObstacleBody(World world, float posX, float posY, String bodyFile, float scale){
+        obstacleType = bodyFile;
+
         obstacleSprite = new Sprite(obstacleTexture);
         obstacleSprite.scale(scale);
 
