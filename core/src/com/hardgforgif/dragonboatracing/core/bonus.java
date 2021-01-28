@@ -11,12 +11,15 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.hardgforgif.dragonboatracing.BodyEditorLoader;
 import com.hardgforgif.dragonboatracing.GameData;
 
-public class bonus {
+public class Bonus {
     public Sprite bonusSprite;
     private Texture bonusTexture;
     public Body bonusBody;
+    public String bonusType;
 
-    public bonus(String textureName){bonusTexture = new Texture(textureName);}
+    public Bonus(String textureName) {
+        bonusTexture = new Texture(textureName);
+    }
 
     /**
      *
@@ -26,8 +29,9 @@ public class bonus {
      * @param bodyFile json file which is a box2D for the body fixture
      * @param scale
      */
+    public void createBonusBody(World world, float posX, float posY, String bodyFile, float scale){
+        bonusType = bodyFile;
 
-    public void creatBounsBody(World world, float posX, float posY, String bodyFile, float scale){
         bonusSprite = new Sprite(bonusTexture);
         bonusSprite.scale(scale);
 

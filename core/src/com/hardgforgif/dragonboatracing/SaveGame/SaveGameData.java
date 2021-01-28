@@ -11,8 +11,10 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter.OutputType;
 import com.hardgforgif.dragonboatracing.GameData;
+import com.hardgforgif.dragonboatracing.UI.ResultsUI;
 import com.hardgforgif.dragonboatracing.core.AI;
 import com.hardgforgif.dragonboatracing.core.Boat;
+import com.hardgforgif.dragonboatracing.core.Bonus;
 import com.hardgforgif.dragonboatracing.core.Lane;
 import com.hardgforgif.dragonboatracing.core.Map;
 import com.hardgforgif.dragonboatracing.core.Obstacle;
@@ -23,7 +25,7 @@ public class SaveGameData {
     public static void SaveGame(Player player, AI[] opponents, Map[] maps) {
         Json json = new Json();
         json.setOutputType(OutputType.json);
-        Save save = new Save();
+        Save save = new Save(GameData.showResultsState);
 
         save.setLeg(GameData.currentLeg);
         save.setTime(GameData.currentTimer);
@@ -51,7 +53,17 @@ public class SaveGameData {
                     obstacles.add(new ObstacleSave(obstacle.obstacleType.replace(".json", "")));
                 }
             }
-            save.setLane(i, new LaneSave(i, obstacles));
+
+            List<BonusSave> bonuses = new ArrayList<BonusSave>();
+            for (Bonus bonus : lane.bonuses) {
+                if (bonus.bonusBody != null) {
+                    bonuses.add(new BonusSave(bonus.bonusType.replace(".json", ""), bonus.bonusBody.getPosition().x, bonus.bonusBody.getPosition().y));
+                } else {
+                    bonuses.add(new BonusSave(bonus.bonusType.replace(".json", "")));
+                }
+            }
+
+            save.setLane(i, new LaneSave(i, obstacles, bonuses));
         }
         FileHandle gameSave = Gdx.files.local("save.json");
         gameSave.writeString(json.prettyPrint(save), false);
@@ -64,6 +76,11 @@ public class SaveGameData {
         Save save = json.fromJson(Save.class, saveString);
 
         GameData.isFromSave = true;
+        if(save.hasPlayerFinished) {
+            GameData.currentUI = new ResultsUI();
+            GameData.showResultsState = true;
+        }
+
         GameData.currentLeg = save.leg;
         GameData.currentTimer = save.time;
         GameData.results = save.standings;
@@ -80,6 +97,10 @@ public class SaveGameData {
                 GameData.level = new float[] { 1f, 1.05f, 1.07f };
                 break;
         }
+
+                
+        GameData.spawnedObstacles = true;
+        GameData.gameInstance.spawnObstacles();
 
         List<BoatSave> boats = save.boats;
 
@@ -117,9 +138,6 @@ public class SaveGameData {
                 GameData.gameInstance.setOpponent(opponentBoat, i - 1);
             }
         }
-        
-        GameData.gameInstance.spawnObstacles();
-        GameData.spawnedObstacles = true;
 
         for (int i = 0; i < 4; i++) {
             Lane lane = GameData.gameInstance.getMap()[GameData.currentLeg].lanes[i];
@@ -131,6 +149,15 @@ public class SaveGameData {
                 float scale = type.contains("1") || type.contains("6") ? -0.8f : 0f;
                 obstacle.createObstacleBody(GameData.gameInstance.getWorld()[GameData.currentLeg], obstacleSave.x, obstacleSave.y, type + ".json", scale);
                 lane.obstacles[j] = obstacle;
+            }
+
+            for (int j = 0; j < lane.bonuses.length; j++) {
+                BonusSave bonusSave = laneSave.bonuses.get(j);
+                String type = bonusSave.type;
+                Bonus bonus = new Bonus(type + ".png");
+                //float scale = type.contains("1") || type.contains("6") ? -0.8f : 0f;
+                bonus.createBonusBody(GameData.gameInstance.getWorld()[GameData.currentLeg], bonusSave.x, bonusSave.y, type + ".json", 0);
+                lane.bonuses[j] = bonus;
             }
         }
     }

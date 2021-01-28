@@ -253,6 +253,12 @@ public class MenuUI extends UI {
             GameData.mainMenuState = false;
             GameData.gamePlayState = true;
             GameData.currentUI = new GamePlayUI();
+
+            // Change the music
+            float currentVolume = GameData.music.getVolume();
+            GameData.music.stop();
+            GameData.music = Gdx.audio.newMusic(Gdx.files.internal("Love_Drama.ogg"));
+            GameData.music.setVolume(currentVolume);
         }
     }
 }

@@ -11,11 +11,15 @@ public class Save {
     public ArrayList<BoatSave> boats;
     public LaneSave[] lanes;
     public String difficulty;
-
-    public Save() {
+    public boolean hasPlayerFinished;
+    
+    public Save(boolean hasPlayerFinished) {
         boats = new ArrayList<>();
         lanes = new LaneSave[4];
+        this.hasPlayerFinished = hasPlayerFinished;
     }
+
+    public Save() {}
 
     public void setLeg(int leg) {
         this.leg = leg;

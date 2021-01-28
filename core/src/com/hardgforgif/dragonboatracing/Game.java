@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.hardgforgif.dragonboatracing.SaveGame.SaveGameData;
 import com.hardgforgif.dragonboatracing.UI.GamePlayUI;
 import com.hardgforgif.dragonboatracing.UI.MenuUI;
+import com.hardgforgif.dragonboatracing.UI.PauseUI;
 import com.hardgforgif.dragonboatracing.UI.ResultsUI;
 import com.hardgforgif.dragonboatracing.core.*;
 
@@ -126,10 +127,10 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 					toBeRemovedBodies.add(fixtureB.getBody());
 				}
 
-				if (fixtureA.getBody().getUserData() instanceof bonus) {
+				if (fixtureA.getBody().getUserData() instanceof Bonus) {
 					toBeRemovedBodies.add(fixtureA.getBody());
 					toGetBonus.add(fixtureB.getBody());// is fixtureA is instance of bonus, then B is the boat
-				} else if (fixtureB.getBody().getUserData() instanceof bonus) {
+				} else if (fixtureB.getBody().getUserData() instanceof Bonus) {
 					toBeRemovedBodies.add(fixtureB.getBody());
 					toGetBonus.add(fixtureA.getBody());
 				}
@@ -337,7 +338,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 					// Find the bonus that have to be removed
 					for (Lane lane : map[GameData.currentLeg].lanes) {
 
-						for (bonus bonus : lane.bonuses) {
+						for (Bonus bonus : lane.bonuses) {
 							if (bonus.bonusBody == body) {
 								bonus.bonusBody = null;
 							}
@@ -458,7 +459,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 			// Render the bonus that weren't destroyed yet
 			for (Lane lane : map[GameData.currentLeg].lanes) {
-				for (bonus bonus : lane.bonuses) {
+				for (Bonus bonus : lane.bonuses) {
 					if (bonus.bonusBody != null)
 						bonus.drawBonus(batch);
 				}
@@ -473,13 +474,18 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			updateStandings();
 
 			// Choose which UI to display based on the current state
-			if (!GameData.showResultsState)
-				GameData.currentUI.drawPlayerUI(UIbatch, player);
-			else {
-				GameData.currentUI.drawUI(UIbatch, mousePosition, Gdx.graphics.getWidth(), Gdx.graphics.getDeltaTime());
-				GameData.currentUI.getInput(Gdx.graphics.getWidth(), clickPosition);
-			}
-			if (GameData.paused) {
+			if (!GameData.paused) {
+				if (!GameData.showResultsState) {
+					GameData.currentUI = new GamePlayUI();
+					GameData.currentUI.drawPlayerUI(UIbatch, player);
+				}
+				else {
+					GameData.currentUI = new ResultsUI();
+					GameData.currentUI.drawUI(UIbatch, mousePosition, Gdx.graphics.getWidth(), Gdx.graphics.getDeltaTime());
+					GameData.currentUI.getInput(Gdx.graphics.getWidth(), clickPosition);
+				}
+			} else {
+				GameData.currentUI = new PauseUI();
 				GameData.currentUI.drawUI(UIbatch, mousePosition, Gdx.graphics.getWidth(), Gdx.graphics.getDeltaTime());
 				GameData.currentUI.getInput(Gdx.graphics.getWidth(), clickPosition);
 			}
@@ -565,8 +571,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		if (keycode == Input.Keys.D)
 			pressedKeys[3] = true;
 		if (keycode == Input.Keys.ESCAPE)
-			if (!GameData.showResultsState)
-				GameData.paused = !GameData.paused;
+			GameData.paused = !GameData.paused;
 		return true;
 	}
 

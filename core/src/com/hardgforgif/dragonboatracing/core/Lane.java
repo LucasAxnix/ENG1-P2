@@ -19,7 +19,7 @@ public class Lane {
 
     public Obstacle[] obstacles;
 
-    public bonus[] bonuses;
+    public Bonus[] bonuses;
 
     public Lane(int mapHeight, MapLayer left, MapLayer right, int nrObstacles, int nrbounses){
         leftBoundry = new float[mapHeight][2];
@@ -29,7 +29,7 @@ public class Lane {
         rightLayer = right;
 
         obstacles = new Obstacle[nrObstacles];
-        bonuses = new bonus[nrbounses];
+        bonuses = new Bonus[nrbounses];
 
     }
 
@@ -117,7 +117,7 @@ public class Lane {
         for (int i =0; i  <nrbounses; i++){
             int randomIndex = new Random().nextInt(3);
             float scale = 0f;
-            bonuses[i] = new bonus("bonuses/bonus"+(randomIndex+1)+".png");
+            bonuses[i] = new Bonus("bonuses/bonus"+(randomIndex+1)+".png");
             float segmentStart = i* segmentLength;
             float yPos = (float) (600f + (segmentStart + Math.random() * segmentLength));
 
@@ -126,7 +126,7 @@ public class Lane {
             float rightLimit = limits[1];
             float xPox = (float) (leftLimit + Math.random() * (rightLimit -leftLimit));
 
-            bonuses[i].creatBounsBody(world, xPox/GameData.METERS_TO_PIXELS, yPos/GameData.METERS_TO_PIXELS,
+            bonuses[i].createBonusBody(world, xPox/GameData.METERS_TO_PIXELS, yPos/GameData.METERS_TO_PIXELS,
                     "bonuses/bonus" + (randomIndex+1) + ".json", scale);
 
         }
