@@ -3,6 +3,7 @@ package com.hardgforgif.dragonboatracing.UI;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
@@ -53,7 +54,7 @@ public class MenuUI extends UI {
     Texture volumeDownInactive;
     Texture logo;
     Texture volumeLabel;
-
+    Texture loadGameUnavailable;
     Texture loadGameInactive;
     Texture loadGameActive;
 
@@ -84,6 +85,7 @@ public class MenuUI extends UI {
 
         loadGameInactive = new Texture("LoadUnselected.png");
         loadGameActive = new Texture("LoadSelected.png");
+        loadGameUnavailable = new Texture("LoadUnavailable.png");
 
         GameData.spawnedObstacles = false;
     }
@@ -156,12 +158,16 @@ public class MenuUI extends UI {
 
         // Draw load game button
         x = screenWidth / 2 - LOAD_BUTTON_WIDTH / 2;
-        if (mousePos.x < x + LOAD_BUTTON_WIDTH && mousePos.x > x &&
-        // cur pos < top_height
-                mousePos.y < LOAD_BUTTON_Y + LOAD_BUTTON_HEIGHT && mousePos.y > LOAD_BUTTON_Y) {
-            batch.draw(loadGameActive, x, LOAD_BUTTON_Y, LOAD_BUTTON_WIDTH, LOAD_BUTTON_HEIGHT);
+        if (doesSaveExist()) {
+            if (mousePos.x < x + LOAD_BUTTON_WIDTH && mousePos.x > x &&
+            // cur pos < top_height
+                    mousePos.y < LOAD_BUTTON_Y + LOAD_BUTTON_HEIGHT && mousePos.y > LOAD_BUTTON_Y) {
+                batch.draw(loadGameActive, x, LOAD_BUTTON_Y, LOAD_BUTTON_WIDTH, LOAD_BUTTON_HEIGHT);
+            } else {
+                batch.draw(loadGameInactive, x, LOAD_BUTTON_Y, LOAD_BUTTON_WIDTH, LOAD_BUTTON_HEIGHT);
+            }
         } else {
-            batch.draw(loadGameInactive, x, LOAD_BUTTON_Y, LOAD_BUTTON_WIDTH, LOAD_BUTTON_HEIGHT);
+            batch.draw(loadGameUnavailable, x, LOAD_BUTTON_Y, LOAD_BUTTON_WIDTH, LOAD_BUTTON_HEIGHT);
         }
 
         batch.end();
@@ -245,20 +251,28 @@ public class MenuUI extends UI {
             playMusic();
         }
 
+        // If the load button is clicked, load the game
         x = screenWidth / 2 - LOAD_BUTTON_WIDTH / 2;
-        if (clickPos.x < x + LOAD_BUTTON_WIDTH && clickPos.x > x
-                && clickPos.y < LOAD_BUTTON_Y + LOAD_BUTTON_HEIGHT && clickPos.y > LOAD_BUTTON_Y) {
+        if (doesSaveExist()) {
+            if (clickPos.x < x + LOAD_BUTTON_WIDTH && clickPos.x > x && clickPos.y < LOAD_BUTTON_Y + LOAD_BUTTON_HEIGHT
+                    && clickPos.y > LOAD_BUTTON_Y) {
 
-            SaveGameData.LoadSave();
-            GameData.mainMenuState = false;
-            GameData.gamePlayState = true;
-            GameData.currentUI = new GamePlayUI();
+                SaveGameData.LoadSave();
+                GameData.mainMenuState = false;
+                GameData.gamePlayState = true;
+                GameData.currentUI = new GamePlayUI();
 
-            // Change the music
-            float currentVolume = GameData.music.getVolume();
-            GameData.music.stop();
-            GameData.music = Gdx.audio.newMusic(Gdx.files.internal("Love_Drama.ogg"));
-            GameData.music.setVolume(currentVolume);
+                // Change the music
+                float currentVolume = GameData.music.getVolume();
+                GameData.music.stop();
+                GameData.music = Gdx.audio.newMusic(Gdx.files.internal("Love_Drama.ogg"));
+                GameData.music.setVolume(currentVolume);
+            }
         }
+    }
+
+    private boolean doesSaveExist() {
+        FileHandle save = Gdx.files.local("save.json");
+        return save.exists();
     }
 }
