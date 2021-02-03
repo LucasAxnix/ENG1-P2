@@ -50,7 +50,7 @@ public class Bonus {
         fixtureDef.restitution = 0f;
         fixtureDef.friction = 0f;
 
-        scale = bonusSprite.getWidth() / GameData.METERS_TO_PIXELS*bonusSprite.getScaleX();
+        scale = bonusSprite.getWidth() / GameData.METERS_TO_PIXELS * bonusSprite.getScaleX();
         loader.attachFixture(bonusBody, "Name", fixtureDef, scale);
 
         bonusSprite.setPosition((bonusBody.getPosition().x * GameData.METERS_TO_PIXELS) - bonusSprite.getWidth()/2 ,
@@ -63,7 +63,7 @@ public class Bonus {
      * Draw bonus
      * @param batch
      */
-    public void drawBonus(Batch batch){
+    public void drawBonus(Batch batch) {
         bonusSprite.setPosition((bonusBody.getPosition().x * GameData.METERS_TO_PIXELS) - bonusSprite.getWidth()/2 ,
                 (bonusBody.getPosition().y * GameData.METERS_TO_PIXELS) - bonusSprite.getHeight() / 2);
 

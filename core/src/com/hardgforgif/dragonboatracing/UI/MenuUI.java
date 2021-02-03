@@ -135,7 +135,7 @@ public class MenuUI extends UI {
         // Draw Volume up Buttons
         x = screenWidth - VOLUME_BUTTON_WIDTH * 2;
         if (mousePos.x < x + VOLUME_BUTTON_WIDTH && mousePos.x > x
-                && mousePos.y < VOLUME_BUTTON_Y + VOLUME_BUTTON_HEIGHT && mousePos.y > EXIT_BUTTON_Y) {
+                && mousePos.y < VOLUME_BUTTON_Y + VOLUME_BUTTON_HEIGHT && mousePos.y > VOLUME_BUTTON_Y) {
             batch.draw(volumeUpActive, x, VOLUME_BUTTON_Y, VOLUME_BUTTON_WIDTH, VOLUME_BUTTON_HEIGHT);
         } else {
             batch.draw(volumeUpInactive, x, VOLUME_BUTTON_Y, VOLUME_BUTTON_WIDTH, VOLUME_BUTTON_HEIGHT);

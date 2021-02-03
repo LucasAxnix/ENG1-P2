@@ -89,11 +89,10 @@ public class PauseUI extends UI {
                     mousePos.y > EXIT_BUTTON_Y
                 ) {
                     GameData.gamePlayState = false;
-                    GameData.mainMenuState = true;
                     GameData.paused = false;
-                    //GameData.resetGameState = true;
-                    GameData.currentUI = new MenuUI();
+                    GameData.resetGameState = true;
                     GameData.gameInstance.saveGame();
+                    GameData.gameInstance.clearBodies();
                 }
         }
     }

@@ -3,9 +3,7 @@ package com.hardgforgif.dragonboatracing;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -34,7 +32,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 	private ArrayList<Body> toBeRemovedBodies = new ArrayList<>();
 	private ArrayList<Body> toUpdateHealth = new ArrayList<>();
-	private ArrayList<Body> toGetBonus = new ArrayList<>();
+	private ArrayList<Body[]> toGetBonus = new ArrayList<>();
 
 	@Override
 	public void create() {
@@ -98,6 +96,12 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		return world;
 	}
 
+	public void clearBodies() {
+		toBeRemovedBodies.clear();
+		toGetBonus.clear();
+		toUpdateHealth.clear();
+	}
+
 	public void spawnObstacles() {
 		// Create the lanes, and the obstacles in the physics game world
 		for (int i = 0; i < 3; i++) {
@@ -129,11 +133,16 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 				if (fixtureA.getBody().getUserData() instanceof Bonus) {
 					toBeRemovedBodies.add(fixtureA.getBody());
-					toGetBonus.add(fixtureB.getBody());// is fixtureA is instance of bonus, then B is the boat
+					toGetBonus.add(new Body[] { fixtureB.getBody(), fixtureA.getBody() });// is fixtureA is instance of
+																							// bonus, then B is the boat
 				} else if (fixtureB.getBody().getUserData() instanceof Bonus) {
 					toBeRemovedBodies.add(fixtureB.getBody());
-					toGetBonus.add(fixtureA.getBody());
+					toGetBonus.add(new Body[] { fixtureA.getBody(), fixtureB.getBody() });
 				}
+
+				if (fixtureA.getBody().getUserData() instanceof Bonus
+						|| fixtureB.getBody().getUserData() instanceof Bonus)
+					return;
 
 				if (fixtureA.getBody().getUserData() instanceof Boat) {
 					toUpdateHealth.add(fixtureA.getBody());
@@ -217,7 +226,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 			// Transition to the results UI
 			GameData.showResultsState = true;
-			GameData.currentUI = new ResultsUI();
+			if (!(GameData.currentUI instanceof ResultsUI))
+				GameData.currentUI = new ResultsUI();
 
 			// Change the player's acceleration so the boat stops moving
 			player.acceleration = -200f;
@@ -321,7 +331,21 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 								GameData.startingPoints[i][1], "Boat1.json");
 
 					}
+				}
 
+				// Iterate through the bodies marked to get bonus
+				for (Body[] body : toGetBonus) {
+					Bonus bonus = (Bonus)body[1].getUserData();
+					if (player.boatBody == body[0] && !player.hasFinished()) {
+						// increase the health, speed, mane
+						player.applyBonusEffect(bonus);
+					}
+					for (AI opponent : opponents) {
+						if (opponent.boatBody == bonus.bonusBody && !opponent.hasFinished()) {
+							// increase the health, speed, mane
+							opponent.applyBonusEffect(bonus);
+						}
+					}
 				}
 
 				// Iterate through the bodies that need to be removed from the world after a
@@ -355,7 +379,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 					if (player.boatBody == body && !player.hasFinished()) {
 						// Reduce the health and the speed
 						player.robustness -= 10f;
-						player.current_speed -= 30f;
+						player.currentSpeed -= 30f;
 
 						// If all the health is lost
 						if (player.robustness <= 0 && GameData.results.size() < 4) {
@@ -367,7 +391,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 							// Transition to the show result screen
 							GameData.showResultsState = true;
-							GameData.currentUI = new ResultsUI();
+							if (!(GameData.currentUI instanceof ResultsUI))
+								GameData.currentUI = new ResultsUI();
 						}
 					}
 					// Otherwise, one of the AI has to be updated similarly
@@ -376,7 +401,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 							if (opponents[i].boatBody == body && !opponents[i].hasFinished()) {
 
 								opponents[i].robustness -= 10f;
-								opponents[i].current_speed -= 30f;
+								opponents[i].currentSpeed -= 30f;
 
 								if (opponents[i].robustness < 0 && GameData.results.size() < 4) {
 									world[GameData.currentLeg].destroyBody(opponents[i].boatBody);
@@ -384,28 +409,6 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 								}
 							}
 
-						}
-					}
-				}
-
-				// Iterate through the bodies marked to get bonus
-				for (Body body : toGetBonus) {
-					if (player.boatBody == body && !player.hasFinished()) {
-						// increase the health, speed, mane
-						player.robustness += 20f;
-						player.current_speed += 50f;
-						player.maneuverability += 30f;
-						player.acceleration += 10f;
-						player.stamina += 20f;
-					}
-					for (AI opponent : opponents) {
-						if (opponent.boatBody == body && !opponent.hasFinished()) {
-							// increase the health, speed, mane
-							opponent.robustness += 20f;
-							opponent.current_speed += 50f;
-							opponent.maneuverability += 30f;
-							opponent.acceleration += 10f;
-							opponent.stamina += 20f;
 						}
 					}
 				}
@@ -431,7 +434,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 						&& GameData.currentTimer > GameData.results.get(0)[1] + 15f) {
 					dnfRemainingBoats();
 					GameData.showResultsState = true;
-					GameData.currentUI = new ResultsUI();
+					if (!(GameData.currentUI instanceof ResultsUI))
+						GameData.currentUI = new ResultsUI();
 				}
 				// Otherwise keep checking for new results
 				else {
@@ -476,84 +480,88 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			// Choose which UI to display based on the current state
 			if (!GameData.paused) {
 				if (!GameData.showResultsState) {
-					GameData.currentUI = new GamePlayUI();
+					if (!(GameData.currentUI instanceof GamePlayUI))
+						GameData.currentUI = new GamePlayUI();
 					GameData.currentUI.drawPlayerUI(UIbatch, player);
 				}
 				else {
-					GameData.currentUI = new ResultsUI();
+					if (!(GameData.currentUI instanceof ResultsUI))
+						GameData.currentUI = new ResultsUI();
 					GameData.currentUI.drawUI(UIbatch, mousePosition, Gdx.graphics.getWidth(), Gdx.graphics.getDeltaTime());
 					GameData.currentUI.getInput(Gdx.graphics.getWidth(), clickPosition);
 				}
 			} else {
-				GameData.currentUI = new PauseUI();
+				if (!(GameData.currentUI instanceof PauseUI))
+					GameData.currentUI = new PauseUI();
 				GameData.currentUI.drawUI(UIbatch, mousePosition, Gdx.graphics.getWidth(), Gdx.graphics.getDeltaTime());
 				GameData.currentUI.getInput(Gdx.graphics.getWidth(), clickPosition);
 			}
+		}
 
 			// Otherwise we need need to reset elements of the game to prepare for the next
 			// race
-			if (GameData.resetGameState) {
-				player = null;
-				for (int i = 0; i < 3; i++)
+		else if (GameData.resetGameState) {
+			player = null;
+			for (int i = 0; i < 3; i++)
 
-					opponents[i] = null;
+				opponents[i] = null;
 
-				GameData.results.clear();
-				GameData.currentTimer = 0f;
-				GameData.penalties = new float[4];
+			GameData.results.clear();
+			GameData.currentTimer = 0f;
+			GameData.penalties = new float[4];
 
-				// If we're coming from the result screen, then we need to advance to the next
-				// leg
-				if (GameData.showResultsState) {
-					GameData.currentLeg += 1;
-					GameData.showResultsState = false;
-					GameData.gamePlayState = true;
+			// If we're coming from the result screen, then we need to advance to the next
+			// leg
+			if (GameData.showResultsState) {
+				GameData.currentLeg += 1;
+				GameData.showResultsState = false;
+				GameData.gamePlayState = true;
+				if (!(GameData.currentUI instanceof GamePlayUI))
 					GameData.currentUI = new GamePlayUI();
-
-				}
-				// Otherwise we're coming from the endgame screen so we need to return to the
-				// main menu
-				else {
-					camera.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
-					camera.update();
-					// Reset everything for the next game
-					world = new World[3];
-					map = new Map[3];
-					for (int i = 0; i < 3; i++) {
-						// Initialize the physics game World
-						world[i] = new World(new Vector2(0f, 0f), true);
-
-						// Initialize the map
-						map[i] = new Map("Map1/Map1.tmx", Gdx.graphics.getWidth());
-
-						// Calculate the ratio between pixels, meters and tiles
-						GameData.TILES_TO_METERS = map[i].getTilesToMetersRatio();
-						GameData.PIXELS_TO_TILES = 1 / (GameData.METERS_TO_PIXELS * GameData.TILES_TO_METERS);
-
-						// Create the collision with the land
-						map[i].createMapCollisions("CollisionLayerLeft", world[i]);
-						map[i].createMapCollisions("CollisionLayerRight", world[i]);
-
-						// Create the lanes, and the obstacles in the physics game world
-						map[i].createLanes(world[i], i);
-
-						// Create the finish line
-						map[i].createFinishLine("finishLine.png");
-
-						// Create a new collision handler for the world
-						createContactListener(world[i]);
-					}
-					GameData.currentLeg = 0;
-					GameData.mainMenuState = true;
-					GameData.currentUI = new MenuUI();
-				}
-				GameData.resetGameState = false;
 			}
+			// Otherwise we're coming from the endgame screen so we need to return to the
+			// main menu
+			else {
+				camera.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
+				camera.update();
+				// Reset everything for the next game
+				world = new World[3];
+				map = new Map[3];
+				for (int i = 0; i < 3; i++) {
+					// Initialize the physics game World
+					world[i] = new World(new Vector2(0f, 0f), true);
+
+					// Initialize the map
+					map[i] = new Map("Map1/Map1.tmx", Gdx.graphics.getWidth());
+
+					// Calculate the ratio between pixels, meters and tiles
+					GameData.TILES_TO_METERS = map[i].getTilesToMetersRatio();
+					GameData.PIXELS_TO_TILES = 1 / (GameData.METERS_TO_PIXELS * GameData.TILES_TO_METERS);
+
+					// Create the collision with the land
+					map[i].createMapCollisions("CollisionLayerLeft", world[i]);
+					map[i].createMapCollisions("CollisionLayerRight", world[i]);
+
+					// Create the lanes, and the obstacles in the physics game world
+					map[i].createLanes(world[i], i);
+
+					// Create the finish line
+					map[i].createFinishLine("finishLine.png");
+
+					// Create a new collision handler for the world
+					createContactListener(world[i]);
+				}
+				GameData.currentLeg = 0;
+				GameData.mainMenuState = true;
+				if (!(GameData.currentUI instanceof MenuUI))
+					GameData.currentUI = new MenuUI();
+			}
+			GameData.resetGameState = false;
+		}
 
 			// If we haven't clicked anywhere in the last frame, reset the click position
 			if (clickPosition.x != 0f && clickPosition.y != 0f)
 				clickPosition.set(0f, 0f);
-		}
 	}
 
 	public void dispose() {

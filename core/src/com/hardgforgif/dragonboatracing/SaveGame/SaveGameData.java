@@ -6,14 +6,11 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter.OutputType;
 import com.hardgforgif.dragonboatracing.GameData;
 import com.hardgforgif.dragonboatracing.UI.ResultsUI;
 import com.hardgforgif.dragonboatracing.core.AI;
-import com.hardgforgif.dragonboatracing.core.Boat;
 import com.hardgforgif.dragonboatracing.core.Bonus;
 import com.hardgforgif.dragonboatracing.core.Lane;
 import com.hardgforgif.dragonboatracing.core.Map;
@@ -34,13 +31,13 @@ public class SaveGameData {
 
         save.addNewBoat(new BoatSave(player.boatType, player.boatBody.getPosition().x, player.boatBody.getPosition().y, true, 
                         player.stamina, player.robustness, player.maneuverability, player.speed, player.acceleration, 0, 
-                        player.current_speed, player.boatBody.getAngle()));
+                        player.currentSpeed, player.boatBody.getAngle()));
 
         for (int i = 0; i < opponents.length; i++) {
             AI aiBoat = opponents[i];
             save.addNewBoat(new BoatSave(aiBoat.boatType, aiBoat.boatBody.getPosition().x, aiBoat.boatBody.getPosition().y, false, 
                         aiBoat.stamina, aiBoat.robustness, aiBoat.maneuverability, aiBoat.speed, aiBoat.acceleration, i + 1, 
-                        aiBoat.current_speed, aiBoat.boatBody.getAngle()));
+                        aiBoat.currentSpeed, aiBoat.boatBody.getAngle()));
         }
 
         for (int i = 0; i < maps[GameData.currentLeg].lanes.length; i++) {
@@ -114,7 +111,7 @@ public class SaveGameData {
                 
                 player.boatBody.setTransform(new Vector2(boatSave.x, boatSave.y), boatSave.currentAngle);
                 player.boatSprite.setRotation(boatSave.currentAngle);
-                player.current_speed = boatSave.currentSpeed;
+                player.currentSpeed = boatSave.currentSpeed;
 
                 player.boatSprite.setRotation((float)Math.toDegrees(player.boatBody.getAngle()));
                 player.boatSprite.setPosition((player.boatBody.getPosition().x * GameData.METERS_TO_PIXELS) - player.boatSprite.getWidth() / 2,
@@ -129,7 +126,7 @@ public class SaveGameData {
             
                 opponentBoat.boatBody.setTransform(new Vector2(boatSave.x, boatSave.y), boatSave.currentAngle);
                 opponentBoat.boatSprite.setRotation(boatSave.currentAngle);
-                opponentBoat.current_speed = boatSave.currentSpeed;
+                opponentBoat.currentSpeed = boatSave.currentSpeed;
 
                 opponentBoat.boatSprite.setRotation((float)Math.toDegrees(opponentBoat.boatBody.getAngle()));
                 opponentBoat.boatSprite.setPosition((opponentBoat.boatBody.getPosition().x * GameData.METERS_TO_PIXELS) - opponentBoat.boatSprite.getWidth() / 2,
@@ -155,7 +152,6 @@ public class SaveGameData {
                 BonusSave bonusSave = laneSave.bonuses.get(j);
                 String type = bonusSave.type;
                 Bonus bonus = new Bonus(type + ".png");
-                //float scale = type.contains("1") || type.contains("6") ? -0.8f : 0f;
                 bonus.createBonusBody(GameData.gameInstance.getWorld()[GameData.currentLeg], bonusSave.x, bonusSave.y, type + ".json", 0);
                 lane.bonuses[j] = bonus;
             }
