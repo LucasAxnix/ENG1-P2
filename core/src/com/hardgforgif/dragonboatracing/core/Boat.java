@@ -241,7 +241,7 @@ public class Boat {
             break;
             case "bonus2":
             // increase maneuverability
-            maneuverability += 1;
+            maneuverability += 5;
             turningSpeed = baseTurningSpeed * maneuverability / 100f;
             break;
             case "bonus3":
@@ -249,12 +249,12 @@ public class Boat {
             currentSpeed += 100;
             break;
             case "bonus4":
-            // increase stamina
-            stamina += 10;
-            break;
-            case "bonus5":
             // increase acceleration
             acceleration += 10;
+            break;
+            case "bonus5":
+            // increase stamina
+            stamina += 10;
             break;
         }
     }
