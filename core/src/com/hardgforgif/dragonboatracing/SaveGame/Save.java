@@ -3,6 +3,9 @@ package com.hardgforgif.dragonboatracing.SaveGame;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Holds all the data relating to the save of the game
+ */
 public class Save {
     public int leg;
     public float time;

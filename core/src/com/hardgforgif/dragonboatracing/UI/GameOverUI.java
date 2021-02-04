@@ -10,8 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.hardgforgif.dragonboatracing.GameData;
 import com.hardgforgif.dragonboatracing.core.Player;
 
-
-public class GameOverUI extends UI{
+public class GameOverUI extends UI {
     private Texture gameOverTexture;
     private Sprite gameOverSprite;
     private Texture victoryTexture;
@@ -24,12 +23,10 @@ public class GameOverUI extends UI{
     private BitmapFont[] resultFonts;
     private BitmapFont titleFont;
     private BitmapFont timerFont;
-    
 
     private ScrollingBackground scrollingBackground = new ScrollingBackground();
 
-
-    public GameOverUI(){
+    public GameOverUI() {
         scrollingBackground.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         scrollingBackground.setSpeedFixed(true);
         scrollingBackground.setSpeed(ScrollingBackground.DEFAULT_SPEED);
@@ -63,12 +60,11 @@ public class GameOverUI extends UI{
         timerFont.getData().setScale(1.4f);
         timerFont.setColor(Color.BLACK);
 
-        for (int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
             entrySprites[i] = new Sprite(entryTexture);
-            entrySprites[i].setSize(backgroundSprite.getWidth() - 100,50);
+            entrySprites[i].setSize(backgroundSprite.getWidth() - 100, 50);
             entrySprites[i].setPosition(backgroundSprite.getX() + 50,
                     backgroundSprite.getY() + backgroundSprite.getHeight() - 200 - (i * 60));
-
 
             resultFonts[i] = new BitmapFont();
             resultFonts[i].getData().setScale(1.2f);
@@ -92,7 +88,7 @@ public class GameOverUI extends UI{
         else
             gameOverSprite.draw(batch);
 
-        for (int i = 0; i < GameData.results.size(); i++){
+        for (int i = 0; i < GameData.results.size(); i++) {
             int boatNr = GameData.results.get(i)[0].intValue();
 
             // Draw the result background element
@@ -104,12 +100,12 @@ public class GameOverUI extends UI{
                 text += "Player: ";
             }
 
-            else { 
+            else {
                 text += "Opponent" + boatNr;
             }
 
             // Display the text
-            resultFonts[i].draw(batch, text, entrySprites[i].getX() + 50,  entrySprites[i].getY() + 30);
+            resultFonts[i].draw(batch, text, entrySprites[i].getX() + 50, entrySprites[i].getY() + 30);
 
         }
         batch.end();
@@ -117,14 +113,12 @@ public class GameOverUI extends UI{
     }
 
     @Override
-    public void drawPlayerUI(Batch batch, Player playerBoat) {
-
-    }
+    public void drawPlayerUI(Batch batch, Player playerBoat) {}
 
     @Override
     public void getInput(float screenWidth, Vector2 mousePos) {
         // When the user clicks on the screen
-        if(mousePos.x != 0f && mousePos.y != 0f) {
+        if (mousePos.x != 0f && mousePos.y != 0f) {
             // Reset the game, after which the game will return to the main menu state
             GameData.gameOverState = false;
             GameData.resetGameState = true;

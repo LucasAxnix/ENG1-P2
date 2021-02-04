@@ -12,7 +12,8 @@ public class AI extends Boat {
     private boolean isTurning = false;
     private float detectedObstacleYPos;
 
-    public AI(float robustness, float stamina, float handling, float speed, int boatType, Lane lane, boolean isFromSave) {
+    public AI(float robustness, float stamina, float handling, float speed, int boatType, Lane lane,
+            boolean isFromSave) {
         super(robustness, stamina, handling, speed, boatType, lane);
         if (!isFromSave) {
             this.robustness *= GameData.level[GameData.currentLeg] * 2;

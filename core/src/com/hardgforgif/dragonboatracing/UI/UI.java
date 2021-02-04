@@ -43,21 +43,21 @@ public abstract class UI {
         }
     }
 
+    /**
+     * Increases the volume of the soundtrack
+     */
     public void volumeUp() {
-        float current_volume = GameData.music.getVolume();
-        if (current_volume < 0.9f) {
-            GameData.music.setVolume(current_volume + 0.1f);
-
-        }
-
+        float currentVolume = GameData.music.getVolume();
+        if (currentVolume < 0.9f)
+            GameData.music.setVolume(currentVolume + 0.1f);
     }
 
+    /**
+     * Decreases the volume of the soundtrack
+     */
     public void volumeDown() {
         float current_volume = GameData.music.getVolume();
-        if (current_volume > 0.1f) {
+        if (current_volume > 0.1f)
             GameData.music.setVolume(current_volume - 0.1f);
-
-        }
     }
-
 }

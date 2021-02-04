@@ -2,7 +2,6 @@ package com.hardgforgif.dragonboatracing;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.hardgforgif.dragonboatracing.UI.GameOverUI;
 import com.hardgforgif.dragonboatracing.UI.MenuUI;
 import com.hardgforgif.dragonboatracing.UI.UI;
 
@@ -56,6 +55,9 @@ public class GameData {
     public static String difficulty = "Error: Difficulty not set";
     public static Boolean spawnedObstacles = false;
 
+    // Instance of the game currently running
     public static Game gameInstance;
+
+    // Allows checking for if the game has been loaded from a save file
     public static boolean isFromSave;
 }

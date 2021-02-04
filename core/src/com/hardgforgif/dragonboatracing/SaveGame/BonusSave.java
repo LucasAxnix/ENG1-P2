@@ -1,7 +1,8 @@
 package com.hardgforgif.dragonboatracing.SaveGame;
 
-import javax.lang.model.element.TypeElement;
-
+/**
+ * Holds all the data relating to the bonus object that needs to be saved
+ */
 public class BonusSave {
     public String type;
     public float x;

@@ -1,5 +1,8 @@
 package com.hardgforgif.dragonboatracing.SaveGame;
 
+/**
+ * Holds all the data relating to the boat that needs to be saved
+ */
 public class BoatSave {
     public int type;
     public float x;
@@ -14,12 +17,13 @@ public class BoatSave {
     public float currentSpeed;
     public float currentAngle;
 
-    public BoatSave(int type, float x, float y, boolean isPlayer, float stamina, float robustness, float maneuverability, float speed, float accleration, int lane, float currentSpeed, float currentAngle) {
+    public BoatSave(int type, float x, float y, boolean isPlayer, float stamina, float robustness,
+            float maneuverability, float speed, float accleration, int lane, float currentSpeed, float currentAngle) {
         this.type = type;
         this.x = x;
         this.y = y;
         this.isPlayer = isPlayer;
-        this.stamina = stamina; 
+        this.stamina = stamina;
         this.robustness = robustness;
         this.maneuverability = maneuverability;
         this.speed = speed;

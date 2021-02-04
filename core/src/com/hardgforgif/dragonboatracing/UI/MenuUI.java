@@ -1,8 +1,6 @@
 package com.hardgforgif.dragonboatracing.UI;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -160,7 +158,6 @@ public class MenuUI extends UI {
         x = screenWidth / 2 - LOAD_BUTTON_WIDTH / 2;
         if (doesSaveExist()) {
             if (mousePos.x < x + LOAD_BUTTON_WIDTH && mousePos.x > x &&
-            // cur pos < top_height
                     mousePos.y < LOAD_BUTTON_Y + LOAD_BUTTON_HEIGHT && mousePos.y > LOAD_BUTTON_Y) {
                 batch.draw(loadGameActive, x, LOAD_BUTTON_Y, LOAD_BUTTON_WIDTH, LOAD_BUTTON_HEIGHT);
             } else {
@@ -176,9 +173,7 @@ public class MenuUI extends UI {
     }
 
     @Override
-    public void drawPlayerUI(Batch batch, Player playerBoat) {
-
-    }
+    public void drawPlayerUI(Batch batch, Player playerBoat) {}
 
     @Override
     public void getInput(float screenWidth, Vector2 clickPos) {
@@ -256,7 +251,8 @@ public class MenuUI extends UI {
         if (doesSaveExist()) {
             if (clickPos.x < x + LOAD_BUTTON_WIDTH && clickPos.x > x && clickPos.y < LOAD_BUTTON_Y + LOAD_BUTTON_HEIGHT
                     && clickPos.y > LOAD_BUTTON_Y) {
-
+                
+                // Load the save
                 SaveGameData.LoadSave();
                 GameData.mainMenuState = false;
                 GameData.gamePlayState = true;

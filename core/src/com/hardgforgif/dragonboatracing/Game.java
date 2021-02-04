@@ -30,6 +30,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 	private Vector2 clickPosition = new Vector2();
 	private boolean[] pressedKeys = new boolean[4]; // W, A, S, D buttons status
 
+	// The rigid bodies of different objects that need modifying
 	private ArrayList<Body> toBeRemovedBodies = new ArrayList<>();
 	private ArrayList<Body> toUpdateHealth = new ArrayList<>();
 	private ArrayList<Body[]> toGetBonus = new ArrayList<>();
@@ -76,33 +77,59 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		GameData.music.setVolume(0.4f);
 	}
 
+	/**
+	 * Saves the game
+	 */
 	public void saveGame() {
 		SaveGameData.SaveGame(player, opponents, map);
 	}
 
+	/**
+	 * Sets the player object
+	 * 
+	 * @param player the new player object to set
+	 */
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
 
+	/**
+	 * Sets an opponent
+	 * 
+	 * @param opponent the oponent to set
+	 * @param lanePos which lane the opponent is in
+	 */
 	public void setOpponent(AI opponent, int lanePos) {
 		opponents[lanePos] = opponent;
 	}
 
+	/**
+	 * Gets the array of all the maps for each leg
+	 */
 	public Map[] getMap() {
 		return map;
 	}
 
+	/**
+	 * Gets the array of all the worls for each leg
+	 */
 	public World[] getWorld() {
 		return world;
 	}
 
+	/**
+	 * Clears the lists containing rigid bodies
+	 */
 	public void clearBodies() {
 		toBeRemovedBodies.clear();
 		toGetBonus.clear();
 		toUpdateHealth.clear();
 	}
 
-	public void spawnObstacles() {
+	/**
+	 * Creates new lanes with collision
+	 */
+	public void createLanes() {
 		// Create the lanes, and the obstacles in the physics game world
 		for (int i = 0; i < 3; i++) {
 			map[i].createLanes(world[i], i);
@@ -152,19 +179,13 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			}
 
 			@Override
-			public void endContact(Contact contact) {
-
-			}
+			public void endContact(Contact contact) {}
 
 			@Override
-			public void preSolve(Contact contact, Manifold manifold) {
-
-			}
+			public void preSolve(Contact contact, Manifold manifold) {}
 
 			@Override
-			public void postSolve(Contact contact, ContactImpulse contactImpulse) {
-
-			}
+			public void postSolve(Contact contact, ContactImpulse contactImpulse) {}
 		});
 	}
 
@@ -307,7 +328,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 		else if (GameData.gamePlayState) {
 			if (!GameData.paused) {
 				if (!GameData.spawnedObstacles) {
-					spawnObstacles();
+					createLanes();
 					GameData.spawnedObstacles = true;
 				}
 				// If it's the first iteration in this state, the boats need to be created at
@@ -335,7 +356,7 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 
 				// Iterate through the bodies marked to get bonus
 				for (Body[] body : toGetBonus) {
-					Bonus bonus = (Bonus)body[1].getUserData();
+					Bonus bonus = (Bonus) body[1].getUserData();
 					if (player.boatBody == body[0] && !player.hasFinished()) {
 						// increase the health, speed, mane
 						player.applyBonusEffect(bonus);
@@ -483,11 +504,11 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 					if (!(GameData.currentUI instanceof GamePlayUI))
 						GameData.currentUI = new GamePlayUI();
 					GameData.currentUI.drawPlayerUI(UIbatch, player);
-				}
-				else {
+				} else {
 					if (!(GameData.currentUI instanceof ResultsUI))
 						GameData.currentUI = new ResultsUI();
-					GameData.currentUI.drawUI(UIbatch, mousePosition, Gdx.graphics.getWidth(), Gdx.graphics.getDeltaTime());
+					GameData.currentUI.drawUI(UIbatch, mousePosition, Gdx.graphics.getWidth(),
+							Gdx.graphics.getDeltaTime());
 					GameData.currentUI.getInput(Gdx.graphics.getWidth(), clickPosition);
 				}
 			} else {
@@ -498,8 +519,8 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			}
 		}
 
-			// Otherwise we need need to reset elements of the game to prepare for the next
-			// race
+		// Otherwise we need need to reset elements of the game to prepare for the next
+		// race
 		else if (GameData.resetGameState) {
 			player = null;
 			for (int i = 0; i < 3; i++)
@@ -559,9 +580,9 @@ public class Game extends ApplicationAdapter implements InputProcessor {
 			GameData.resetGameState = false;
 		}
 
-			// If we haven't clicked anywhere in the last frame, reset the click position
-			if (clickPosition.x != 0f && clickPosition.y != 0f)
-				clickPosition.set(0f, 0f);
+		// If we haven't clicked anywhere in the last frame, reset the click position
+		if (clickPosition.x != 0f && clickPosition.y != 0f)
+			clickPosition.set(0f, 0f);
 	}
 
 	public void dispose() {

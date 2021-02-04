@@ -59,8 +59,8 @@ public class Map {
      * Creates bodies on the edges of the river, based on a pre-made layer of
      * objects in Tiled
      * 
-     * @param collisionLayerName Name of the Tiled layer with the rectangle objects
-     * @param world              World to spawn the bodies in
+     * @param collisionLayerName name of the Tiled layer with the rectangle objects
+     * @param world              world to spawn the bodies in
      */
     public void createMapCollisions(String collisionLayerName, World world) {
         // Get the objects from the object layer in the tilemap
@@ -92,7 +92,7 @@ public class Map {
             fixtureDef.density = 0f;
             fixtureDef.restitution = 0f;
             fixtureDef.friction = 0f;
-            Fixture fixture = objectBody.createFixture(fixtureDef);
+            objectBody.createFixture(fixtureDef);
 
             shape.dispose();
         }
@@ -112,59 +112,69 @@ public class Map {
     }
 
     /**
-     * Instantiates the lane array and spawns obstacles on each of the lanes
+     * Instantiates the lane array and spawns obstacles/bonuses on each of the lanes
      * 
-     * @param world World to spawn the obstacles in
+     * @param world world to spawn the obstacles/bonuses in
      */
     public void createLanes(World world, int worldLeg) {
-        int nrObstables = 15;
-        int nrBonuses = 20;
-        
-        switch(GameData.difficulty) {
+        int obstacleCount = 15;
+        int bounusCount = 20;
+
+        // Multiplicatively modify the obstacle and bonus count depending on difficulty
+        switch (GameData.difficulty) {
             case "EASY":
-                nrObstables *= 1;
-                nrBonuses /= 1;
+                obstacleCount *= 1;
+                bounusCount /= 1;
                 break;
             case "MEDIUM":
-                nrObstables *= 2;
-                nrBonuses /= 2;
+                obstacleCount *= 2;
+                bounusCount /= 2;
                 break;
             case "HARD":
-                nrObstables *= 3;
-                nrBonuses /= 4;
+                obstacleCount *= 3;
+                bounusCount /= 4;
                 break;
         }
 
+        // Create the lanes
         MapLayer leftLayer = tiledMap.getLayers().get("CollisionLayerLeft");
         MapLayer rightLayer = tiledMap.getLayers().get("Lane1");
 
-        lanes[0] = new Lane(mapHeight, leftLayer, rightLayer, nrObstables, nrBonuses);
+        lanes[0] = new Lane(mapHeight, leftLayer, rightLayer, obstacleCount, bounusCount);
         lanes[0].constructBoundries(unitScale);
 
         leftLayer = tiledMap.getLayers().get("Lane1");
         rightLayer = tiledMap.getLayers().get("Lane2");
 
-        lanes[1] = new Lane(mapHeight, leftLayer, rightLayer, nrObstables, nrBonuses);
+        lanes[1] = new Lane(mapHeight, leftLayer, rightLayer, obstacleCount, bounusCount);
         lanes[1].constructBoundries(unitScale);
 
         leftLayer = tiledMap.getLayers().get("Lane2");
         rightLayer = tiledMap.getLayers().get("Lane3");
 
-        lanes[2] = new Lane(mapHeight, leftLayer, rightLayer, nrObstables, nrBonuses);
+        lanes[2] = new Lane(mapHeight, leftLayer, rightLayer, obstacleCount, bounusCount);
         lanes[2].constructBoundries(unitScale);
 
         leftLayer = tiledMap.getLayers().get("Lane3");
         rightLayer = tiledMap.getLayers().get("CollisionLayerRight");
 
-        lanes[3] = new Lane(mapHeight, leftLayer, rightLayer, nrObstables, nrBonuses);
+        lanes[3] = new Lane(mapHeight, leftLayer, rightLayer, obstacleCount, bounusCount);
         lanes[3].constructBoundries(unitScale);
 
-        if (GameData.isFromSave && worldLeg <= GameData.currentLeg) return;
+        // Check to see if the game is being loaded from a save, if it is then don't
+        // spawn the obstacles or bonuses as they have already been created by the save
+        if (GameData.isFromSave && worldLeg <= GameData.currentLeg)
+            return;
 
         spawnObstacles(world);
         spawnBonuses(world);
     }
 
+    /**
+     * Spawns the obstacles for the map
+     * 
+     * @param world the world to spawn the obstacles in
+     */
     public void spawnObstacles(World world) {
         lanes[0].spawnObstacles(world, mapHeight / GameData.PIXELS_TO_TILES);
         lanes[1].spawnObstacles(world, mapHeight / GameData.PIXELS_TO_TILES);
@@ -172,6 +182,11 @@ public class Map {
         lanes[3].spawnObstacles(world, mapHeight / GameData.PIXELS_TO_TILES);
     }
 
+    /**
+     * Spawns the bonuses for the map
+     * 
+     * @param world the world to spawn the bonuses in
+     */
     public void spawnBonuses(World world) {
         lanes[0].spawnBonus(world, mapHeight / GameData.PIXELS_TO_TILES);
         lanes[1].spawnBonus(world, mapHeight / GameData.PIXELS_TO_TILES);

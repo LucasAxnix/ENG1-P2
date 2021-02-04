@@ -34,7 +34,7 @@ public class PauseUI extends UI {
     public void drawUI(Batch batch, Vector2 mousePos, float screenWidth, float delta) {
         batch.begin();
         if (GameData.paused) {
-
+            // Draw the resume button
             float x = screenWidth / 2 - RESUME_BUTTON_WIDTH / 2;
             if (
                 mousePos.x < x + RESUME_BUTTON_WIDTH && mousePos.x > x &&
@@ -47,6 +47,7 @@ public class PauseUI extends UI {
                 batch.draw(resumeUnselected, x, RESUME_BUTTON_Y, RESUME_BUTTON_WIDTH, RESUME_BUTTON_HEIGHT);
             }
 
+            // Draw the exit button
             x = screenWidth / 2 - EXIT_BUTTON_WIDTH / 2;
             if (
                 mousePos.x < x + EXIT_BUTTON_WIDTH && mousePos.x > x &&
@@ -69,9 +70,8 @@ public class PauseUI extends UI {
     @Override
     public void getInput(float screenWidth, Vector2 mousePos) {
         if (GameData.paused) {
-        
+            // If the resume button is clicked, resume the game
             float x = screenWidth / 2 - RESUME_BUTTON_WIDTH / 2;
-
             if (
                     mousePos.x < x + RESUME_BUTTON_WIDTH && mousePos.x > x &&
                     // cur pos < top_height
@@ -80,7 +80,8 @@ public class PauseUI extends UI {
                 ) {
                     GameData.paused = false;
                 }
-
+            
+            // If the exit button is pressed, save and leave the game
             x = screenWidth / 2 - EXIT_BUTTON_WIDTH / 2;
             if (
                 mousePos.x < x + EXIT_BUTTON_WIDTH && mousePos.x > x &&
@@ -92,6 +93,7 @@ public class PauseUI extends UI {
                     GameData.paused = false;
                     GameData.resetGameState = true;
                     GameData.gameInstance.saveGame();
+                    // make sure there are no rigid bodies left in the lists
                     GameData.gameInstance.clearBodies();
                 }
         }
