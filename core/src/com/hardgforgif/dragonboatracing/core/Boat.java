@@ -20,8 +20,9 @@ public class Boat {
     public float speed;
     public float acceleration;
 
-    public float current_speed = 20f;
+    public float currentSpeed = 20f;
     public float turningSpeed = 0.25f;
+    public float baseTurningSpeed = 0.25f;
     public float targetAngle = 0f;
 
     public Sprite boatSprite;
@@ -155,13 +156,13 @@ public class Boat {
      * Moves the boat forward, based i=on it's rotation
      */
     public void moveBoat(){
-        current_speed += 0.15f * (acceleration/90)  * (stamina/100);
-        if (current_speed > speed)
-            current_speed = speed;
-        if (stamina < 70f && current_speed > speed * 0.8f)
-            current_speed = speed * 0.8f;
-        if (current_speed < 0)
-            current_speed = 0;
+        currentSpeed += 0.15f * (acceleration/90)  * (stamina/100);
+        if (currentSpeed > speed)
+            currentSpeed = speed;
+        if (stamina < 70f && currentSpeed > speed * 0.8f)
+            currentSpeed = speed * 0.8f;
+        if (currentSpeed < 0)
+            currentSpeed = 0;
 
 
         // Get the coordinates of the center of the boat
@@ -201,7 +202,7 @@ public class Boat {
         Vector2 movement = new Vector2();
 
         direction.set(target).sub(boatHeadPos).nor();
-        velocity.set(direction).scl(current_speed);
+        velocity.set(direction).scl(currentSpeed);
         movement.set(velocity).scl(Gdx.graphics.getDeltaTime());
 
         boatBody.setLinearVelocity(movement);
@@ -229,5 +230,32 @@ public class Boat {
             newAngle += turningSpeed * (this.stamina / 70);
 
         boatBody.setTransform(boatBody.getPosition(), newAngle * MathUtils.degRad);
+    }
+
+    public void applyBonusEffect(Bonus bonus) {
+        String type = bonus.bonusType.replace(".json", "").replace("bonuses/", "");
+        switch(type) {
+            case "bonus1":
+            // increase robustness
+            robustness += 10;
+            break;
+            case "bonus2":
+            // increase maneuverability
+            maneuverability += 1;
+            turningSpeed = baseTurningSpeed * maneuverability / 100f;
+            break;
+            case "bonus3":
+            // increase current speed
+            currentSpeed += 100;
+            break;
+            case "bonus4":
+            // increase stamina
+            stamina += 10;
+            break;
+            case "bonus5":
+            // increase acceleration
+            acceleration += 10;
+            break;
+        }
     }
 }

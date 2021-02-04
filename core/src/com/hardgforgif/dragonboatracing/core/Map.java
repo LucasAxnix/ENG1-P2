@@ -118,37 +118,45 @@ public class Map {
      */
     public void createLanes(World world, int worldLeg) {
         int nrObstables = 15;
-        if (GameData.difficulty == "EASY") {
-            nrObstables *= 1;
-        } else if (GameData.difficulty == "MEDIUM") {
-            nrObstables *= 2;
-        } else if (GameData.difficulty == "HARD") {
-            nrObstables *= 3;
-
+        int nrBonuses = 20;
+        
+        switch(GameData.difficulty) {
+            case "EASY":
+                nrObstables *= 1;
+                nrBonuses /= 1;
+                break;
+            case "MEDIUM":
+                nrObstables *= 2;
+                nrBonuses /= 2;
+                break;
+            case "HARD":
+                nrObstables *= 3;
+                nrBonuses /= 4;
+                break;
         }
 
         MapLayer leftLayer = tiledMap.getLayers().get("CollisionLayerLeft");
         MapLayer rightLayer = tiledMap.getLayers().get("Lane1");
 
-        lanes[0] = new Lane(mapHeight, leftLayer, rightLayer, nrObstables, 30);
+        lanes[0] = new Lane(mapHeight, leftLayer, rightLayer, nrObstables, nrBonuses);
         lanes[0].constructBoundries(unitScale);
 
         leftLayer = tiledMap.getLayers().get("Lane1");
         rightLayer = tiledMap.getLayers().get("Lane2");
 
-        lanes[1] = new Lane(mapHeight, leftLayer, rightLayer, nrObstables,30);
+        lanes[1] = new Lane(mapHeight, leftLayer, rightLayer, nrObstables, nrBonuses);
         lanes[1].constructBoundries(unitScale);
 
         leftLayer = tiledMap.getLayers().get("Lane2");
         rightLayer = tiledMap.getLayers().get("Lane3");
 
-        lanes[2] = new Lane(mapHeight, leftLayer, rightLayer, nrObstables,30);
+        lanes[2] = new Lane(mapHeight, leftLayer, rightLayer, nrObstables, nrBonuses);
         lanes[2].constructBoundries(unitScale);
 
         leftLayer = tiledMap.getLayers().get("Lane3");
         rightLayer = tiledMap.getLayers().get("CollisionLayerRight");
 
-        lanes[3] = new Lane(mapHeight, leftLayer, rightLayer, nrObstables,30);
+        lanes[3] = new Lane(mapHeight, leftLayer, rightLayer, nrObstables, nrBonuses);
         lanes[3].constructBoundries(unitScale);
 
         if (GameData.isFromSave && worldLeg <= GameData.currentLeg) return;

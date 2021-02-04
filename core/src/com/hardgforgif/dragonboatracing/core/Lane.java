@@ -114,8 +114,8 @@ public class Lane {
     public void spawnBonus(World world, float mapHeight){
         int nrbounses = bonuses.length;
         float segmentLength = mapHeight/ nrbounses;
-        for (int i =0; i  <nrbounses; i++){
-            int randomIndex = new Random().nextInt(3);
+        for (int i = 0; i < nrbounses; i++){
+            int randomIndex = new Random().nextInt(5);
             float scale = 0f;
             bonuses[i] = new Bonus("bonuses/bonus"+(randomIndex+1)+".png");
             float segmentStart = i* segmentLength;
