@@ -2,6 +2,7 @@ package com.hardgforgif.dragonboatracing;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.hardgforgif.dragonboatracing.UI.GameOverUI;
 import com.hardgforgif.dragonboatracing.UI.MenuUI;
 import com.hardgforgif.dragonboatracing.UI.UI;
 

@@ -35,7 +35,7 @@ public class ResultsUI extends UI{
 
         background = new Texture(Gdx.files.internal("Background.png"));
         backgroundSprite = new Sprite(background);
-        backgroundSprite.setPosition(200,150);
+        backgroundSprite.setPosition(200, 150);
         backgroundSprite.setSize(Gdx.graphics.getWidth() - 400,Gdx.graphics.getHeight() - 300);
 
         entryTexture = new Texture(Gdx.files.internal("Background.png"));
