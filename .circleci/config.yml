@@ -39,6 +39,8 @@ jobs: # a collection of steps
       - store_test_results:
       # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
           path: core/build/test-results/test
+      - store_artifacts:
+          path: core/build/test-results/test
       - run:
           name: Assemble JAR
           command: |
