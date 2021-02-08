@@ -38,10 +38,7 @@ jobs: # a collection of steps
           key: v1-gradle-cache-{{ checksum "build.gradle" }}
       - store_test_results:
       # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
-          path: build/test-results/test
-      - store_artifacts: # Upload test results for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
-          path: core\build\test-results\test\TEST-com.hardgforgif.dragonboatracing.core.AITest.AITest.xml
-       
+          path: core/build/test-results/test
       - run:
           name: Assemble JAR
           command: |
