@@ -1,0 +1,923 @@
+{
+"time": 57.55233,
+"standings": [
+	[ 0, 51.13933 ]
+],
+"boats": [
+	{
+		"type": 1,
+		"x": 2.2897809,
+		"y": 91.059105,
+		"isPlayer": true,
+		"stamina": 115.83967,
+		"robustness": 265,
+		"maneuverability": 720,
+		"speed": 110,
+		"acceleration": -200
+	},
+	{
+		"x": 5.199544,
+		"y": 84.04093,
+		"stamina": 135.83969,
+		"robustness": 220.8,
+		"maneuverability": 163.6,
+		"speed": 101.200005,
+		"acceleration": 122,
+		"lane": 1,
+		"currentSpeed": 95.00746
+	},
+	{
+		"type": 2,
+		"x": 8.548606,
+		"y": 88.565506,
+		"stamina": 115.83967,
+		"robustness": 175.6,
+		"maneuverability": 209.6,
+		"speed": 101.200005,
+		"acceleration": 122,
+		"lane": 2,
+		"currentSpeed": 101.200005
+	},
+	{
+		"type": 3,
+		"x": 10.107667,
+		"y": 80.16755,
+		"stamina": 175.83969,
+		"robustness": 69.6,
+		"maneuverability": 260.6,
+		"speed": 110.4,
+		"acceleration": 152.8,
+		"lane": 3,
+		"currentSpeed": 28.695711
+	}
+],
+"lanes": [
+	{
+		"obstacles": [
+			{
+				"type": "Obstacles/Obstacle3",
+				"x": 2.8732748,
+				"y": 10.472816
+			},
+			{
+				"type": "Obstacles/Obstacle1",
+				"x": 3.194183,
+				"y": 14.804347
+			},
+			{
+				"type": "Obstacles/Obstacle5",
+				"x": 4.377522,
+				"y": 24.416082
+			},
+			{
+				"type": "Obstacles/Obstacle2",
+				"x": 3.6958628,
+				"y": 25.761286
+			},
+			{
+				"type": "Obstacles/Obstacle4",
+				"x": 3.4751718,
+				"y": 34.21416
+			},
+			{
+				"type": "Obstacles/Obstacle5",
+				"x": 3.0259478,
+				"y": 39.573833
+			},
+			{
+				"type": "Obstacles/Obstacle2",
+				"x": 2.6452572,
+				"y": 46.481186
+			},
+			{
+				"type": "Obstacles/Obstacle5",
+				"x": 2.734931,
+				"y": 54.177876
+			},
+			{
+				"type": "Obstacles/Obstacle3",
+				"x": 4.2436733,
+				"y": 58.420918
+			},
+			{
+				"type": "Obstacles/Obstacle4",
+				"x": 2.9744077,
+				"y": 63.21083
+			},
+			{
+				"type": "Obstacles/Obstacle1",
+				"x": 3.1109896,
+				"y": 69.20612
+			},
+			{
+				"type": "Obstacles/Obstacle4",
+				"x": 2.8496847,
+				"y": 74.07237
+			},
+			{
+				"type": "Obstacles/Obstacle5",
+				"x": 2.3622787,
+				"y": 85.07551
+			},
+			{
+				"type": "Obstacles/Obstacle1"
+			},
+			{
+				"type": "Obstacles/Obstacle4",
+				"x": 2.8408566,
+				"y": 92.935
+			}
+		],
+		"bonuses": [
+			{
+				"type": "bonuses/bonus2"
+			},
+			{
+				"type": "bonuses/bonus3"
+			},
+			{
+				"type": "bonuses/bonus3"
+			},
+			{
+				"type": "bonuses/bonus3"
+			},
+			{
+				"type": "bonuses/bonus3"
+			},
+			{
+				"type": "bonuses/bonus2"
+			},
+			{
+				"type": "bonuses/bonus2"
+			},
+			{
+				"type": "bonuses/bonus2"
+			},
+			{
+				"type": "bonuses/bonus2"
+			},
+			{
+				"type": "bonuses/bonus1"
+			},
+			{
+				"type": "bonuses/bonus3"
+			},
+			{
+				"type": "bonuses/bonus3"
+			},
+			{
+				"type": "bonuses/bonus1"
+			},
+			{
+				"type": "bonuses/bonus3"
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 2.4384122,
+				"y": 95.13793
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 3.207036,
+				"y": 102.35345
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 3.18619,
+				"y": 108.63256
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 3.0726786,
+				"y": 116.20038
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 3.3551888,
+				"y": 122.6603
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 3.350918,
+				"y": 125.18653
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 2.5635002,
+				"y": 132.57355
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 3.1852655,
+				"y": 135.1694
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 3.4034119,
+				"y": 142.21198
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 2.5204432,
+				"y": 152.66815
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 3.9318807,
+				"y": 159.38315
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 3.7074683,
+				"y": 160.06644
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 2.3899267,
+				"y": 169.35497
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 3.049614,
+				"y": 175.98846
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 2.5312107,
+				"y": 180.10826
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 3.5550876,
+				"y": 185.5041
+			}
+		]
+	},
+	{
+		"laneNumber": 1,
+		"obstacles": [
+			{
+				"type": "Obstacles/Obstacle4",
+				"x": 3.7053938,
+				"y": 9.774402
+			},
+			{
+				"type": "Obstacles/Obstacle4",
+				"x": 5.748014,
+				"y": 14.523162
+			},
+			{
+				"type": "Obstacles/Obstacle2",
+				"x": 5.714831,
+				"y": 20.214817
+			},
+			{
+				"type": "Obstacles/Obstacle3",
+				"x": 6.587271,
+				"y": 28.628836
+			},
+			{
+				"type": "Obstacles/Obstacle2",
+				"x": 6.3873515,
+				"y": 31.561281
+			},
+			{
+				"type": "Obstacles/Obstacle1"
+			},
+			{
+				"type": "Obstacles/Obstacle2",
+				"x": 4.605549,
+				"y": 43.214832
+			},
+			{
+				"type": "Obstacles/Obstacle2",
+				"x": 4.5454617,
+				"y": 50.55857
+			},
+			{
+				"type": "Obstacles/Obstacle6",
+				"x": 7.178586,
+				"y": 59.412163
+			},
+			{
+				"type": "Obstacles/Obstacle2",
+				"x": 5.7052197,
+				"y": 67.331024
+			},
+			{
+				"type": "Obstacles/Obstacle2",
+				"x": 5.0523267,
+				"y": 73.029594
+			},
+			{
+				"type": "Obstacles/Obstacle6",
+				"x": 5.187768,
+				"y": 76.15006
+			},
+			{
+				"type": "Obstacles/Obstacle6"
+			},
+			{
+				"type": "Obstacles/Obstacle6",
+				"x": 6.23485,
+				"y": 88.867165
+			},
+			{
+				"type": "Obstacles/Obstacle3",
+				"x": 6.0065403,
+				"y": 95.436424
+			}
+		],
+		"bonuses": [
+			{
+				"type": "bonuses/bonus2"
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 5.083316,
+				"y": 15.704526
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 5.4830213,
+				"y": 19.282562
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 5.680766,
+				"y": 25.540396
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 5.533908,
+				"y": 33.214077
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 5.897174,
+				"y": 37.603832
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 4.586375,
+				"y": 44.927277
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 4.9370756,
+				"y": 50.90234
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 5.8295174,
+				"y": 55.93657
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 5.228801,
+				"y": 64.97401
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 4.769739,
+				"y": 71.12429
+			},
+			{
+				"type": "bonuses/bonus1"
+			},
+			{
+				"type": "bonuses/bonus3"
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 4.4788804,
+				"y": 88.26303
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 4.5681043,
+				"y": 94.465706
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 6.60439,
+				"y": 100.29426
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 5.631832,
+				"y": 107.48759
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 5.6051207,
+				"y": 113.91378
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 5.773926,
+				"y": 117.459724
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 5.4761457,
+				"y": 128.60088
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 6.2968254,
+				"y": 132.16971
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 5.715652,
+				"y": 139.08499
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 5.5459795,
+				"y": 141.22093
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 6.07052,
+				"y": 147.93022
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 4.7020016,
+				"y": 155.23076
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 5.672239,
+				"y": 165.30652
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 4.5335903,
+				"y": 170.2209
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 4.577608,
+				"y": 176.71957
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 4.614504,
+				"y": 178.39825
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 4.6162953,
+				"y": 190.22905
+			}
+		]
+	},
+	{
+		"laneNumber": 2,
+		"obstacles": [
+			{
+				"type": "Obstacles/Obstacle6",
+				"x": 7.3044643,
+				"y": 8.614058
+			},
+			{
+				"type": "Obstacles/Obstacle2",
+				"x": 7.8706417,
+				"y": 14.540779
+			},
+			{
+				"type": "Obstacles/Obstacle2",
+				"x": 8.362407,
+				"y": 23.754295
+			},
+			{
+				"type": "Obstacles/Obstacle2",
+				"x": 8.726506,
+				"y": 24.777744
+			},
+			{
+				"type": "Obstacles/Obstacle6",
+				"x": 7.5976405,
+				"y": 33.059982
+			},
+			{
+				"type": "Obstacles/Obstacle1",
+				"x": 7.5109563,
+				"y": 41.268856
+			},
+			{
+				"type": "Obstacles/Obstacle5",
+				"x": 7.8391314,
+				"y": 45.047554
+			},
+			{
+				"type": "Obstacles/Obstacle5",
+				"x": 8.756684,
+				"y": 54.999966
+			},
+			{
+				"type": "Obstacles/Obstacle4",
+				"x": 8.09571,
+				"y": 55.737648
+			},
+			{
+				"type": "Obstacles/Obstacle4",
+				"x": 8.125733,
+				"y": 63.371952
+			},
+			{
+				"type": "Obstacles/Obstacle6"
+			},
+			{
+				"type": "Obstacles/Obstacle4",
+				"x": 8.438396,
+				"y": 77.578224
+			},
+			{
+				"type": "Obstacles/Obstacle6",
+				"x": 7.949159,
+				"y": 82.66124
+			},
+			{
+				"type": "Obstacles/Obstacle5",
+				"x": 7.134405,
+				"y": 88.169014
+			},
+			{
+				"type": "Obstacles/Obstacle4",
+				"x": 7.8916264,
+				"y": 97.78498
+			}
+		],
+		"bonuses": [
+			{
+				"type": "bonuses/bonus3",
+				"x": 6.6653895,
+				"y": 11.971282
+			},
+			{
+				"type": "bonuses/bonus2"
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 8.329414,
+				"y": 22.108408
+			},
+			{
+				"type": "bonuses/bonus1"
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 7.977579,
+				"y": 32.303146
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 8.11377,
+				"y": 40.497982
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 7.733548,
+				"y": 47.36872
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 8.243823,
+				"y": 53.88642
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 8.481396,
+				"y": 59.418774
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 7.549338,
+				"y": 66.57154
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 7.368993,
+				"y": 70.46892
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 7.6634035,
+				"y": 75.595055
+			},
+			{
+				"type": "bonuses/bonus3"
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 7.906597,
+				"y": 88.71363
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 8.372558,
+				"y": 92.64431
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 8.111227,
+				"y": 102.03215
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 8.931014,
+				"y": 107.90373
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 7.708034,
+				"y": 113.99435
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 7.367781,
+				"y": 121.579445
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 8.296608,
+				"y": 126.23273
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 8.021864,
+				"y": 134.31685
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 9.355218,
+				"y": 136.31325
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 7.8366714,
+				"y": 141.73628
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 7.6869946,
+				"y": 149.88055
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 8.409669,
+				"y": 154.0235
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 8.8813095,
+				"y": 162.53152
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 8.148652,
+				"y": 167.67458
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 6.959944,
+				"y": 173.68651
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 7.3459263,
+				"y": 178.3317
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 7.595418,
+				"y": 190.28644
+			}
+		]
+	},
+	{
+		"laneNumber": 3,
+		"obstacles": [
+			{
+				"type": "Obstacles/Obstacle3",
+				"x": 9.44023,
+				"y": 7.9235897
+			},
+			{
+				"type": "Obstacles/Obstacle2",
+				"x": 11.054668,
+				"y": 13.21191
+			},
+			{
+				"type": "Obstacles/Obstacle6"
+			},
+			{
+				"type": "Obstacles/Obstacle2"
+			},
+			{
+				"type": "Obstacles/Obstacle4",
+				"x": 10.243505,
+				"y": 31.355259
+			},
+			{
+				"type": "Obstacles/Obstacle5",
+				"x": 9.870547,
+				"y": 37.925774
+			},
+			{
+				"type": "Obstacles/Obstacle3",
+				"x": 10.206472,
+				"y": 43.70491
+			},
+			{
+				"type": "Obstacles/Obstacle1"
+			},
+			{
+				"type": "Obstacles/Obstacle4",
+				"x": 11.351262,
+				"y": 60.52476
+			},
+			{
+				"type": "Obstacles/Obstacle2",
+				"x": 10.116729,
+				"y": 62.7759
+			},
+			{
+				"type": "Obstacles/Obstacle1",
+				"x": 10.536405,
+				"y": 72.38849
+			},
+			{
+				"type": "Obstacles/Obstacle4",
+				"x": 9.582745,
+				"y": 78.52043
+			},
+			{
+				"type": "Obstacles/Obstacle5",
+				"x": 9.599623,
+				"y": 83.862686
+			},
+			{
+				"type": "Obstacles/Obstacle3",
+				"x": 9.452031,
+				"y": 89.903046
+			},
+			{
+				"type": "Obstacles/Obstacle4",
+				"x": 10.251117,
+				"y": 93.81005
+			}
+		],
+		"bonuses": [
+			{
+				"type": "bonuses/bonus3",
+				"x": 9.148036,
+				"y": 8.868726
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 10.515865,
+				"y": 17.06108
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 10.761932,
+				"y": 23.563154
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 11.298323,
+				"y": 28.264246
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 10.2141,
+				"y": 34.94103
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 8.990434,
+				"y": 38.273685
+			},
+			{
+				"type": "bonuses/bonus3"
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 10.4387045,
+				"y": 49.323402
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 10.819004,
+				"y": 59.9912
+			},
+			{
+				"type": "bonuses/bonus2"
+			},
+			{
+				"type": "bonuses/bonus2"
+			},
+			{
+				"type": "bonuses/bonus2"
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 9.516526,
+				"y": 83.32638
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 9.451428,
+				"y": 86.00725
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 10.719712,
+				"y": 97.133194
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 10.713485,
+				"y": 101.192604
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 11.318234,
+				"y": 106.64742
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 10.948242,
+				"y": 110.44957
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 10.360771,
+				"y": 120.373085
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 11.025562,
+				"y": 123.059006
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 10.511555,
+				"y": 132.29166
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 10.449497,
+				"y": 139.20737
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 9.942051,
+				"y": 146.42764
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 9.950992,
+				"y": 150.60649
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 9.974764,
+				"y": 158.42796
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 10.83541,
+				"y": 163.66087
+			},
+			{
+				"type": "bonuses/bonus3",
+				"x": 11.768943,
+				"y": 166.66426
+			},
+			{
+				"type": "bonuses/bonus1",
+				"x": 10.227986,
+				"y": 172.56628
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 9.408727,
+				"y": 179.10016
+			},
+			{
+				"type": "bonuses/bonus2",
+				"x": 9.420051,
+				"y": 186.17726
+			}
+		]
+	}
+],
+"difficulty": "MEDIUM",
+"hasPlayerFinished": true
+}
