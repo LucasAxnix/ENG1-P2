@@ -160,7 +160,8 @@ public class Boat {
 
     /**
      * Checks if the boat finished the race
-     * 
+     * If this algorithm changes update the test found in BoatTest class
+     * to reflect the algorithm used here
      * @return True if the boat passed the finish line, false otherwise
      */
     public boolean hasFinished() {

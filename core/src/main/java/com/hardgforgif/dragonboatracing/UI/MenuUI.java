@@ -187,6 +187,8 @@ public class MenuUI extends UI {
             GameData.choosingBoatState = true;
             GameData.currentUI = new ChoosingUI();
             // Set difficulty for level ad AI
+            // If these values are changed then test them by changing
+            // the values in the level difficulty true test
             GameData.difficulty = "EASY";
             GameData.level = new float[] { 0.87f, 0.89f, 0.92f };
             GameData.isFromSave = false;
@@ -202,6 +204,8 @@ public class MenuUI extends UI {
             GameData.choosingBoatState = true;
             GameData.currentUI = new ChoosingUI();
             // Set difficulty for level and AI
+            // If these values are changed then test them by changing
+            // the values in the level difficulty true test
             GameData.difficulty = "MEDIUM";
             GameData.level = new float[] { 0.92f, 0.97f, 1f };
             GameData.isFromSave = false;
@@ -217,6 +221,8 @@ public class MenuUI extends UI {
             GameData.choosingBoatState = true;
             GameData.currentUI = new ChoosingUI();
             // Set difficulty for level and AI
+            // If these values are changed then test them by changing
+            // the values in the level difficulty true test
             GameData.difficulty = "HARD";
             GameData.level = new float[] { 1f, 1.05f, 1.07f };
             GameData.isFromSave = false;

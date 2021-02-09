@@ -29,6 +29,8 @@ public class GameData {
 
     // Create a list of possible boat stats
     // Ordered by: robustness, speed, acceleration, maneuverability
+    // If these values are changed update the values in the unique boats test to see
+    //if the test still returns true
     public static float[][] boatsStats = new float[][] { { 120, 110, 100, 80 }, { 55, 110, 130, 60 },
             { 90, 110, 100, 130 }, { 65, 120, 90, 55 } };
 

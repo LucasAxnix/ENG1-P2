@@ -104,6 +104,8 @@ public class AI extends Boat {
 
     /**
      * Checks for obstacles in range of the AI
+     * If this algorithm is changed change the algorithm found in the withindistance test 
+     * class of the AI test class
      * 
      * @return True if there's an obstacle in range, false otherwise
      */
