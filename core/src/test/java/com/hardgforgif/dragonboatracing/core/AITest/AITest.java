@@ -4,8 +4,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-import javax.accessibility.AccessibleRelation;
-
 public class AITest {
     /*
      * Again due to libgdx issues this will have to be done testing cases when an
