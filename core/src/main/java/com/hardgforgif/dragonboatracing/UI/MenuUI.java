@@ -64,7 +64,7 @@ public class MenuUI extends UI {
         scrollingBackground.setSpeed(ScrollingBackground.DEFAULT_SPEED);
         // Add images for the play buttons
         playEasyButtonActive = new Texture("PlayEasySelected.png");// "PlayEasySelected.png"
-        playEasyButtonInactive = new Texture("PlayEasyUnSelected.png");
+        playEasyButtonInactive = new Texture("PlayEasyUnselected.png");
         playMediumButtonActive = new Texture("PlayMediumSelected.png");// "PlayMediumSelected.png"
         playMediumButtonInactive = new Texture("PlayMediumUnselected.png");
         playHardButtonActive = new Texture("PlayHardSelected.png");// "PlayHardSelected.png"
